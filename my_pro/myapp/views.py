@@ -1,3 +1,4 @@
+from django.core.checks import messages
 from django.shortcuts import render
 
 # Create your views here.
@@ -85,7 +86,7 @@ def register(req):
             messages.success(req,"User Registered Successfully")
             return redirect("reg")
 
-    return render(req, "myapp/Register.html")
+    return render(req, "myapp/register.html")
 
 def login(req):
     if req.method == "POST":
@@ -115,4 +116,4 @@ def login(req):
             elif error == "INVALID_PASSWORD":
                 messages.error(req, "Password Is Incorrect")
             return redirect("log")
-    return render(req, "myapp/Login.html")
+    return render(req, "myapp/login.html")
