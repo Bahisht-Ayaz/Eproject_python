@@ -16,5 +16,7 @@ urlpatterns = [
     path("portfolio.html",views.portfolio, name="portfolio"),
     path('blog-single.html', views.blog_single, name='blog-single'),
     path("blog-grid.html", views.portfolio, name="blog-grid"),
+    path("register", views.register, name="reg"),
+    path("login", views.login, name="log"),
 
 ]
