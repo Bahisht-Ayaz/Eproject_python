@@ -1,9 +1,8 @@
 from django.core.checks import messages
-from django.shortcuts import render
 
 # Create your views here.
 
-from django.contrib.sessions.backends import db
+from firebase_config import db
 from django.shortcuts import render, redirect
 from django.conf import settings
 import requests
@@ -117,3 +116,6 @@ def login(req):
                 messages.error(req, "Password Is Incorrect")
             return redirect("log")
     return render(req, "myapp/login.html")
+def dashboard(req):
+    uemail = req.session["email"]
+    return render(req,"myapp/dashboard.html",{"e" : uemail})

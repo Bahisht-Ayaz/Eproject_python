@@ -18,5 +18,6 @@ urlpatterns = [
     path("blog-grid.html", views.portfolio, name="blog-grid"),
     path("register", views.register, name="reg"),
     path("login", views.login, name="log"),
+    path("d", views.dashboard, name="dash")
 
 ]
