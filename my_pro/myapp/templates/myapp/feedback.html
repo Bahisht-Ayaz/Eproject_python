@@ -1,120 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback Form</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+{% extends "master.html" %}
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #6dd5fa, #2980b9);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
-    }
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+<style>
+  /* Body Style */
+  body {
+    background: linear-gradient(135deg, #6dd5fa, #2980b9);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+  }
+
+  /* Feedback Card */
+  .feedback-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .feedback-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Header Text */
+  .feedback-card h2 {
+    text-align: center;
+    color: #2980b9;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  /* Input Fields Style */
+  .form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding-left: 40px;
+    font-size: 1rem;
+  }
+
+  /* Icon Positioning */
+  .input-group-text {
+    background-color: transparent;
+    border: none;
+    color: #2980b9;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Form Group Margin */
+  .form-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  /* Textarea Resize */
+  textarea {
+    resize: none;
+  }
+
+  /* Submit Button Style */
+  .btn-submit {
+    width: 100%;
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+
+  .btn-submit:hover {
+    background: #1e5f91;
+    transform: scale(1.03);
+  }
+
+  /* Responsive Layout */
+  @media (max-width: 600px) {
     .feedback-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      width: 400px;
-      padding: 30px;
-      transition: all 0.3s ease;
-    }
-
-    .feedback-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      width: 90%;
     }
 
     .feedback-card h2 {
-      text-align: center;
-      color: #2980b9;
-      margin-bottom: 20px;
-      font-weight: 600;
+      font-size: 1.3rem;
     }
+  }
+</style>
 
-    .form-control {
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      padding-left: 40px;
-    }
+<div class="feedback-card">
+  <h2><i class="fa-solid fa-comment-dots"></i> Feedback Form</h2>
 
-    .input-group-text {
-      background-color: transparent;
-      border: none;
-      color: #2980b9;
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+  <form method="post" action="{% url 'feedback' %}">
+    {% csrf_token %}
 
-    .form-group {
-      position: relative;
-      margin-bottom: 20px;
-    }
+    <!-- Name Input -->
+    <div class="form-group">
+      <i class="fa-solid fa-user input-group-text"></i>
+      <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+    </div>
 
-    textarea {
-      resize: none;
-    }
+    <!-- Email Input -->
+    <div class="form-group">
+      <i class="fa-solid fa-envelope input-group-text"></i>
+      <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+    </div>
 
-    .btn-submit {
-      width: 100%;
-      background: #2980b9;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 16px;
-      transition: 0.3s;
-    }
+    <!-- Rating Select -->
+    <div class="form-group">
+      <i class="fa-solid fa-star input-group-text"></i>
+      <select class="form-control" name="rating" required>
+        <option value="">Rate Us</option>
+        <option>⭐ Very Poor</option>
+        <option>⭐⭐ Poor</option>
+        <option>⭐⭐⭐ Average</option>
+        <option>⭐⭐⭐⭐ Good</option>
+        <option>⭐⭐⭐⭐⭐ Excellent</option>
+      </select>
+    </div>
 
-    .btn-submit:hover {
-      background: #1e5f91;
-      transform: scale(1.03);
-    }
-  </style>
-</head>
-<body>
+    <!-- Feedback Textarea -->
+    <div class="form-group">
+      <i class="fa-solid fa-pen input-group-text"></i>
+      <textarea class="form-control" name="feedback" rows="3" placeholder="Your Feedback" required></textarea>
+    </div>
 
-  <div class="feedback-card">
-    <h2><i class="fa-solid fa-comment-dots"></i> Feedback Form</h2>
-    <form>
-      <div class="form-group">
-        <i class="fa-solid fa-user input-group-text"></i>
-        <input type="text" class="form-control" placeholder="Your Name" required>
-      </div>
+    <!-- Submit Button -->
+    <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
+  </form>
+</div>
 
-      <div class="form-group">
-        <i class="fa-solid fa-envelope input-group-text"></i>
-        <input type="email" class="form-control" placeholder="Your Email" required>
-      </div>
-
-      <div class="form-group">
-        <i class="fa-solid fa-star input-group-text"></i>
-        <select class="form-control" required>
-          <option value="">Rate Us</option>
-          <option>⭐ Very Poor</option>
-          <option>⭐⭐ Poor</option>
-          <option>⭐⭐⭐ Average</option>
-          <option>⭐⭐⭐⭐ Good</option>
-          <option>⭐⭐⭐⭐⭐ Excellent</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <i class="fa-solid fa-pen input-group-text"></i>
-        <textarea class="form-control" rows="3" placeholder="Your Feedback" required></textarea>
-      </div>
-
-      <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
-    </form>
-  </div>
-
-</body>
-</html>
+{% endblock %}

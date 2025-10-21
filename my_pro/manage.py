@@ -2,6 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import logging
+
+logging.getLogger('grpc').setLevel(logging.ERROR)
+logging.getLogger('absl').setLevel(logging.ERROR)
 
 
 def main():

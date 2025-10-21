@@ -1,8 +1,8 @@
-from django.core.checks import messages
 
 # Create your views here.
-
-from firebase_config import db
+from django.contrib import messages
+from my_pro.firebase_config import db
+from firebase_admin import firestore
 from django.shortcuts import render, redirect
 from django.conf import settings
 import requests
@@ -16,8 +16,34 @@ def pricing (request):
 def faq (request):
     return render(request,"myapp/faq.html")
 
-def contact (request):
-    return render(request,"myapp/contact.html")
+def contact(request):
+    if request.method == "POST":
+        name = request.POST.get("user_name")
+        email = request.POST.get("user_email")
+        subject = request.POST.get("user_subject")
+        message = request.POST.get("user_message")
+
+        if not name or not email or not subject or not message:
+            messages.error(request, "⚠️ Please fill in all fields.")
+            return redirect("contact")
+
+        try:
+            # Send to Firestore
+            db.collection("contactMessages").add({
+                "name": name,
+                "email": email,
+                "subject": subject,
+                "message": message,
+                "timestamp": firestore.SERVER_TIMESTAMP,
+            })
+            messages.success(request, "✅ Message sent successfully!")
+        except Exception as e:
+            print("Firestore error:", e)
+            messages.error(request, "❌ Failed to send message. Please try again.")
+
+        return redirect("contact")
+
+    return render(request, "myapp/contact.html")
 
 def service (request):
     return render(request,"myapp/service.html")
@@ -37,11 +63,6 @@ def blog_left_sidebar (request):
 def blog_single(request):
     return render(request, 'myapp/blog_single.html')
 
-def portfolio (request):
-    return render(request,"myapp/portfolio.html")
-
-def portfolio_single (request):
-    return render(request,"myapp/portfolio-single.html")
 
 def blog_grid (request):
     return render(request,"myapp/blog-grid.html")
@@ -116,6 +137,17 @@ def login(req):
                 messages.error(req, "Password Is Incorrect")
             return redirect("log")
     return render(req, "myapp/login.html")
+
 def dashboard(req):
+    if "email" not in req.session:
+        return redirect('log')  # Agar login nahi to login page pe bhej do
     uemail = req.session["email"]
-    return render(req,"myapp/dashboard.html",{"e" : uemail})
+    return render(req, "myapp/index.html", {"e": uemail})
+
+
+def logout(request):
+    try:
+        del request.session['email']
+    except KeyError:
+        pass
+    return redirect('log')  # Login page pe redirect karein

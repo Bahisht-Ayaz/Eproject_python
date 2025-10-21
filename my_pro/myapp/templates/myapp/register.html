@@ -13,7 +13,7 @@
     }
 
     body {
-      background-color: #f7f9fc;
+      background-color: #e5e5e5; /* light grey background */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,18 +21,20 @@
     }
 
     .container {
-      background-color: #ffffff;
+      background-color: #ffffff; /* pure white card */
       padding: 40px 30px;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       width: 100%;
       max-width: 400px;
+      border: 1px solid #ddd; /* subtle grey border */
     }
 
     h2 {
       text-align: center;
       margin-bottom: 24px;
-      color: #333;
+      color: #333; /* dark grey text */
+      font-weight: 600;
     }
 
     .form-group {
@@ -42,46 +44,72 @@
     label {
       display: block;
       margin-bottom: 6px;
-      color: #555;
+      color: #555; /* medium grey */
       font-weight: 500;
+      font-size: 14px;
     }
 
     input {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ccc;
+      border: 1px solid #ccc; /* soft border */
       border-radius: 8px;
-      background-color: #fefefe;
-      transition: border-color 0.3s;
+      background-color: #f9f9f9; /* off-white input background */
+      color: #333;
+      font-size: 15px;
+      transition: all 0.3s ease;
     }
 
     input:focus {
       outline: none;
-      border-color: #5c9ded;
-      box-shadow: 0 0 0 2px rgba(92, 157, 237, 0.2);
+      border-color: #888; /* darker grey on focus */
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(160, 160, 160, 0.2);
     }
 
     button {
       width: 100%;
       padding: 12px;
-      background-color: #5c9ded;
+      background-color: #555; /* grey button */
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
     }
 
     button:hover {
-      background-color: #4a89dc;
+      background-color: #333; /* darker grey hover */
+      transform: scale(1.03);
     }
 
     .footer-text {
       margin-top: 16px;
       text-align: center;
       font-size: 14px;
-      color: #777;
+      color: #666;
+    }
+
+    .footer-text a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      background-color: #ffefef;
+      border: 1px solid #ffcccc;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      color: #a94442;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -102,22 +130,25 @@
         {% csrf_token %}
       <div class="form-group">
         <label for="name">Full Name</label>
-        <input type="text" id="name" name="name"  />
+        <input type="text" id="name" name="name" />
       </div>
 
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input type="email" id="email" name="email"  />
+        <input type="email" id="email" name="email" />
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password"  />
+        <input type="password" id="password" name="password" />
       </div>
 
       <button type="submit">Register</button>
     </form>
 
+    <div class="footer-text">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
   </div>
 </body>
 </html>

@@ -13,11 +13,10 @@ urlpatterns = [
     path("blog-left-sidebar.html", views.blog_left_sidebar, name="blog-left-sidebar"),
     path("blog-full-width.html", views.blog_full_width, name="blog-full-width"),
     path("service.html",views.service, name="service"),
-    path("portfolio.html",views.portfolio, name="portfolio"),
     path('blog-single.html', views.blog_single, name='blog-single'),
-    path("blog-grid.html", views.portfolio, name="blog-grid"),
     path("register", views.register, name="reg"),
     path("login", views.login, name="log"),
-    path("d", views.dashboard, name="dash")
+    path("d", views.dashboard, name="dash"),
+    path("logout", views.logout, name="logout")
 
 ]
