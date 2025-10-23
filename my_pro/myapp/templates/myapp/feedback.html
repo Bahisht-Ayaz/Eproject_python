@@ -1,145 +1,225 @@
 {% extends "master.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- ✅ Font Awesome for icons -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
 
 <style>
-  /* Body Style */
+  /* 🌿 General Page Styling */
   body {
-    background: linear-gradient(135deg, #6dd5fa, #2980b9);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
+    background-color: #eef2f6;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
   }
 
-  /* Feedback Card */
-  .feedback-card {
-    background: #fff;
+  section.contact-form {
+    padding: 80px 0;
+  }
+
+  .contact-form .container {
+    background-color: #ffffff;
+    padding: 60px 50px;
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    max-width: 950px;
+    transition: all 0.4s ease;
+  }
+
+  .contact-form .container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 🌿 Heading */
+  .contact-form h2 {
+    color: #2b3d5c;
+    font-weight: 700;
+    font-size: 34px;
+    margin-bottom: 12px;
+  }
+
+  .contact-form p {
+    color: #6b7280;
+    font-size: 16px;
+    margin-bottom: 45px;
+  }
+
+  /* 🌿 Input Group Styling */
+  .input-group {
+    position: relative;
     width: 100%;
-    max-width: 400px;
-    padding: 30px;
+  }
+
+  .input-group i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 17px;
     transition: all 0.3s ease;
   }
 
-  .feedback-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-  }
-
-  /* Header Text */
-  .feedback-card h2 {
-    text-align: center;
-    color: #2980b9;
-    margin-bottom: 20px;
-    font-weight: 600;
-    font-size: 1.5rem;
-  }
-
-  /* Input Fields Style */
-  .form-control {
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 13px 16px 13px 48px;
     border-radius: 10px;
-    border: 1px solid #ccc;
-    padding-left: 40px;
-    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    background-color: #f9fafb;
+    font-size: 15px;
+    transition: all 0.3s ease;
   }
 
-  /* Icon Positioning */
-  .input-group-text {
-    background-color: transparent;
-    border: none;
-    color: #2980b9;
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  /* Form Group Margin */
-  .form-group {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  /* Textarea Resize */
-  textarea {
+  .input-group textarea {
     resize: none;
   }
 
-  /* Submit Button Style */
-  .btn-submit {
-    width: 100%;
-    background: #2980b9;
-    color: white;
+  .input-group input:focus,
+  .input-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.25);
+  }
+
+  .input-group input:focus + i,
+  .input-group textarea:focus + i {
+    color: #3b82f6;
+  }
+
+  /* 🌿 Button Styling */
+  .btn-default {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
     border: none;
     border-radius: 10px;
-    padding: 10px;
-    font-size: 16px;
-    transition: 0.3s;
+    padding: 13px 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.25);
   }
 
-  .btn-submit:hover {
-    background: #1e5f91;
-    transform: scale(1.03);
+  .btn-default:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
   }
 
-  /* Responsive Layout */
-  @media (max-width: 600px) {
-    .feedback-card {
-      padding: 20px;
-      width: 90%;
+  .btn-default i {
+    margin-right: 8px;
+  }
+
+  /* 🌿 Alerts */
+  .alert {
+    margin-top: 25px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .alert-success {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+
+  .alert-error,
+  .alert-danger {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+
+  /* 🌿 Responsive Design */
+  @media (max-width: 768px) {
+    .contact-form .container {
+      padding: 35px 25px;
     }
 
-    .feedback-card h2 {
-      font-size: 1.3rem;
+    .contact-form h2 {
+      font-size: 28px;
+    }
+
+    .btn-default {
+      width: 100%;
     }
   }
 </style>
 
-<div class="feedback-card">
-  <h2><i class="fa-solid fa-comment-dots"></i> Feedback Form</h2>
+<section class="contact-form">
+  <div class="container">
+    <h2 class="text-center">FeedBack Form</h2>
+    <p class="text-center">We’d love to hear from you. Fill out the form below to get in touch.</p>
 
-  <form method="post" action="{% url 'feedback' %}">
-    {% csrf_token %}
+    <form class="row g-3" id="contact-form" method="POST" action="{% url 'contact' %}">
+      {% csrf_token %}
 
-    <!-- Name Input -->
-    <div class="form-group">
-      <i class="fa-solid fa-user input-group-text"></i>
-      <input type="text" class="form-control" name="name" placeholder="Your Name" required>
-    </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group input-group mb-3">
+          <input
+            name="user_name"
+            type="text"
+            class="form-control"
+            placeholder="Your Name"
+            required
+          />
+          <i class="fa-solid fa-user"></i>
+        </div>
 
-    <!-- Email Input -->
-    <div class="form-group">
-      <i class="fa-solid fa-envelope input-group-text"></i>
-      <input type="email" class="form-control" name="email" placeholder="Your Email" required>
-    </div>
+        <div class="form-group input-group mb-3">
+          <input
+            name="user_email"
+            type="email"
+            class="form-control"
+            placeholder="Email Address"
+            required
+          />
+          <i class="fa-solid fa-envelope"></i>
+        </div>
 
-    <!-- Rating Select -->
-    <div class="form-group">
-      <i class="fa-solid fa-star input-group-text"></i>
-      <select class="form-control" name="rating" required>
-        <option value="">Rate Us</option>
-        <option>⭐ Very Poor</option>
-        <option>⭐⭐ Poor</option>
-        <option>⭐⭐⭐ Average</option>
-        <option>⭐⭐⭐⭐ Good</option>
-        <option>⭐⭐⭐⭐⭐ Excellent</option>
-      </select>
-    </div>
+        <div class="form-group input-group mb-3">
+          <input
+            name="Rate_us"
+            type="text"
+            class="form-control"
+            placeholder="Rate Us"
+            required
+          />
 
-    <!-- Feedback Textarea -->
-    <div class="form-group">
-      <i class="fa-solid fa-pen input-group-text"></i>
-      <textarea class="form-control" name="feedback" rows="3" placeholder="Your Feedback" required></textarea>
-    </div>
+          <i class="fa-solid fa-star"></i>
+        </div>
+      </div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
-  </form>
-</div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group input-group mb-4">
+          <textarea
+            name="user_message"
+            class="form-control"
+            rows="6"
+            placeholder="Your Feedback"
+            required
+          ></textarea>
+          <i class="fa-solid fa-comment-dots"></i>
+        </div>
+        <button class="btn btn-default" type="submit">
+          <i class="fa-solid fa-paper-plane"></i> Send FeedBack
+        </button>
+      </div>
+    </form>
 
+    {% if messages %}
+      <div class="mt-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}
