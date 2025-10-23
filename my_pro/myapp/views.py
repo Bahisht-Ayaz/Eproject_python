@@ -46,7 +46,7 @@ def contact(request):
     return render(request, "myapp/contact.html")
 
 def service (request):
-    return render(request,"myapp/service.html")
+    return render(request,"myapp/weatherupdate.html")
 
 def feedback (request):
     return render(request,"myapp/feedback.html")
