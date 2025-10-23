@@ -45,33 +45,17 @@ def contact(request):
 
     return render(request, "myapp/contact.html")
 
-def service (request):
+def weatherupdate (request):
     return render(request,"myapp/weatherupdate.html")
+
 
 def feedback (request):
     return render(request,"myapp/feedback.html")
 
-def blog_right_sidebar (request):
-    return render(request,"myapp/blog-right-sidebar.html")
-
-def coming_soon (request):
-    return render(request,"myapp/coming-soon.html")
-
-def blog_left_sidebar (request):
-    return render(request,"myapp/blog-left-sidebar.html")
-
-def blog_single(request):
-    return render(request, 'myapp/blog_single.html')
-
-
-def blog_grid (request):
-    return render(request,"myapp/blog-grid.html")
 
 def about (request):
     return render(request,"myapp/about.html")
 
-def blog_full_width (request):
-    return render(request,"myapp/blog-full-width.html")
 def register(req):
     if req.method == "POST":
         n = req.POST.get("name")
