@@ -93,7 +93,7 @@
 
   /* 🌿 Button Styling */
   .btn-default {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background-color: #666; /* medium grey */
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -106,7 +106,7 @@
   }
 
   .btn-default:hover {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
+    background-color: #444; /* darker grey */
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
   }
@@ -157,7 +157,7 @@
     <h2 class="text-center">FeedBack Form</h2>
     <p class="text-center">We’d love to hear from you. Fill out the form below to get in touch.</p>
 
-    <form class="row g-3" id="contact-form" method="POST" action="{% url 'contact' %}">
+    <form class="row g-3" id="feedback-form" method="POST" action="{% url 'feedback' %}">
       {% csrf_token %}
 
       <div class="col-md-6 col-sm-12">

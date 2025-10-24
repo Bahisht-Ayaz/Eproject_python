@@ -49,8 +49,35 @@ def weatherupdate (request):
     return render(request,"myapp/weatherupdate.html")
 
 
-def feedback (request):
-    return render(request,"myapp/feedback.html")
+def feedback(request):
+    if request.method == "POST":
+        name = request.POST.get("user_name")
+        email = request.POST.get("user_email")
+        rate = request.POST.get("Rate_us")
+        message = request.POST.get("user_message")
+
+        if not name or not email or not rate or not message:
+            messages.error(request, "⚠️ Please fill in all fields.")
+            return redirect("feedback")
+
+        try:
+            # ✅ Save feedback to Firestore
+            db.collection("Feedbacks").add({
+                "name": name,
+                "email": email,
+                "rating": rate,
+                "message": message,
+                "timestamp": firestore.SERVER_TIMESTAMP
+            })
+            messages.success(request, "✅ Thank you for your feedback!")
+        except Exception as e:
+            print("Firestore error:", e)
+            messages.error(request, "❌ Something went wrong. Try again later.")
+
+        return redirect("feedback")
+
+    return render(request, "myapp/feedback.html")
+
 
 
 def about (request):
@@ -135,3 +162,33 @@ def logout(request):
     except KeyError:
         pass
     return redirect('log')  # Login page pe redirect karein
+
+
+def Admin_dash (request):
+    return render(request,"myapp/Admin.html")
+
+
+def user_list (request):
+    return render(request,"myapp/user_list.html")
+
+
+def feedback_details(request):
+    try:
+        feedback_ref = db.collection("Feedbacks").order_by("timestamp", direction=firestore.Query.DESCENDING)
+        feedback_docs = feedback_ref.stream()
+        feedback_list = []
+
+        for doc in feedback_docs:
+            data = doc.to_dict()
+            feedback_list.append({
+                "name": data.get("name"),
+                "email": data.get("email"),
+                "rating": data.get("rating"),
+                "message": data.get("message"),
+                "timestamp": data.get("timestamp")
+            })
+    except Exception as e:
+        print("Error fetching feedbacks:", e)
+        feedback_list = []
+
+    return render(request, "myapp/feedback_details.html", {"feedbacks": feedback_list})
