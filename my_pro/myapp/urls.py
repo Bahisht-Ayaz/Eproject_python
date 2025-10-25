@@ -16,4 +16,6 @@ urlpatterns = [
     path("Admin_dash", views.Admin_dash, name="Admin_dash"),
     path("user_list", views.user_list, name="user_list"),
     path("feedback_details", views.feedback_details, name="feedback_details"),
+    path('predict', views.predict_weather, name='predict_weather'),
+
 ]

@@ -1,4 +1,4 @@
-#!c:\users\asp\desktop\eproject_python\venv\scripts\python.exe
+#!C:\Users\asp\Desktop\Eproject_python\venv\Scripts\python.exe
 # -*- coding: utf-8 -*-
 # Copyright 2025 Google LLC
 #

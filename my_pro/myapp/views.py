@@ -6,6 +6,9 @@ from firebase_admin import firestore
 from django.shortcuts import render, redirect
 from django.conf import settings
 import requests
+import joblib
+import pandas as pd
+import os
 
 def index (request):
     return render(request,"myapp/index.html")
@@ -168,8 +171,24 @@ def Admin_dash (request):
     return render(request,"myapp/Admin.html")
 
 
-def user_list (request):
-    return render(request,"myapp/user_list.html")
+def user_list(request):
+    try:
+        user_ref = db.collection("User").order_by("timestamp", direction=firestore.Query.DESCENDING)
+        user_docs = user_ref.stream()
+        user_list = []
+
+        for doc in user_docs:
+            data = doc.to_dict()
+            user_list.append({
+                "Name": data.get("Name"),
+                "Email": data.get("Email"),
+                "Role": data.get("Role"),
+            })
+    except Exception as e:
+        print("Error fetching feedbacks:", e)
+        feedback_list = []
+
+    return render(request, "myapp/feedback_details.html", {"User": user_list})
 
 
 def feedback_details(request):
@@ -192,3 +211,47 @@ def feedback_details(request):
         feedback_list = []
 
     return render(request, "myapp/feedback_details.html", {"feedbacks": feedback_list})
+
+
+
+
+
+# Model load
+model_path = os.path.join(os.path.dirname(__file__), "models", "best_pipeline.joblib")
+model = joblib.load(model_path)
+
+def predict_weather(request):
+    result = None
+    probability = None
+
+    if request.method == "POST":
+        city = request.POST.get("city")
+        year = int(request.POST.get("year"))
+        avg_temp = float(request.POST.get("avg_temp"))
+        rainfall_mm = float(request.POST.get("rainfall_mm"))
+        humidity = float(request.POST.get("humidity"))
+
+        # DataFrame for prediction
+        df = pd.DataFrame([{
+            "city": city,
+            "year_rel": year - 2015,
+            "avg_temp": avg_temp,
+            "rainfall_mm": rainfall_mm,
+            "humidity": humidity
+        }])
+
+        # Prediction
+        proba = model.predict_proba(df)[:, 1][0]
+        pred = model.predict(df)[0]
+
+        if proba >= 0.5:
+            result = "Baarish hogi ☔"
+        else:
+            result = "Baarish nahi hogi ☀️"
+
+        probability = round(proba * 100, 2)
+
+    return render(request,"myapp/predict_weather.html", {
+        "result": result,
+        "probability": probability
+    })
