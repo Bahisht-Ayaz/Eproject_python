@@ -1,3 +1,188 @@
+<!--{% extends "master.html" %}-->
+<!--{% block content %}-->
+<!--<style>-->
+<!--  body {-->
+<!--    background: linear-gradient(135deg, #f1f1f1, #e4e4e4);-->
+<!--    font-family: "Poppins", sans-serif;-->
+<!--  }-->
+
+<!--  .weather-card {-->
+<!--    background: #ffffff;-->
+<!--    border-radius: 20px;-->
+<!--    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);-->
+<!--    transition: all 0.3s ease;-->
+<!--  }-->
+
+<!--  .weather-card:hover {-->
+<!--    transform: translateY(-4px);-->
+<!--    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);-->
+<!--  }-->
+
+<!--  .card-header {-->
+<!--    background: linear-gradient(135deg, #6c757d, #adb5bd);-->
+<!--    border-top-left-radius: 20px !important;-->
+<!--    border-top-right-radius: 20px !important;-->
+<!--    padding: 20px;-->
+<!--    color: #fff;-->
+<!--  }-->
+
+<!--  .card-header h4 {-->
+<!--    font-weight: 700;-->
+<!--    margin: 0;-->
+<!--  }-->
+
+<!--  label.form-label {-->
+<!--    font-weight: 600;-->
+<!--    color: #444;-->
+<!--  }-->
+
+<!--  /* ✅ Dropdown width slightly smaller and centered */-->
+<!--  select.form-select {-->
+<!--    width: 95%;-->
+<!--    margin: 0 auto;-->
+<!--    display: block;-->
+<!--    border-radius: 12px;-->
+<!--    border: 1px solid #bbb;-->
+<!--    padding: 12px 15px;-->
+<!--    transition: all 0.3s ease;-->
+<!--    background-color: #f8f9fa;-->
+<!--    font-size: 16px;-->
+<!--    font-weight: 500;-->
+<!--  }-->
+
+<!--  select.form-select:focus {-->
+<!--    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.3);-->
+<!--    border-color: #6c757d;-->
+<!--    outline: none;-->
+<!--    background-color: #fff;-->
+<!--  }-->
+
+<!--  .btn-custom {-->
+<!--    background: linear-gradient(135deg, #6c757d, #495057);-->
+<!--    color: white;-->
+<!--    font-weight: 600;-->
+<!--    border: none;-->
+<!--    border-radius: 10px;-->
+<!--    transition: all 0.3s ease;-->
+<!--  }-->
+
+<!--  .btn-custom:hover {-->
+<!--    background: linear-gradient(135deg, #495057, #343a40);-->
+<!--    transform: scale(1.03);-->
+<!--  }-->
+
+<!--  #weatherResult {-->
+<!--    margin-top: 25px;-->
+<!--    text-align: center;-->
+<!--    font-weight: 600;-->
+<!--    color: #333;-->
+<!--  }-->
+
+<!--  #loading {-->
+<!--    color: #6c757d;-->
+<!--    font-weight: 500;-->
+<!--  }-->
+
+<!--  .weather-icon {-->
+<!--    width: 100px;-->
+<!--    height: 100px;-->
+<!--    margin: 10px auto;-->
+<!--    display: none;-->
+<!--  }-->
+
+<!--  table {-->
+<!--    width: 100%;-->
+<!--    margin-top: 15px;-->
+<!--    border-collapse: collapse;-->
+<!--    background-color: #fafafa;-->
+<!--    border-radius: 10px;-->
+<!--    overflow: hidden;-->
+<!--  }-->
+
+<!--  th, td {-->
+<!--    padding: 12px 15px;-->
+<!--    text-align: left;-->
+<!--    border-bottom: 1px solid #e0e0e0;-->
+<!--  }-->
+
+<!--  th {-->
+<!--    background-color: #f1f3f5;-->
+<!--    color: #333;-->
+<!--    font-weight: 600;-->
+<!--  }-->
+
+<!--  td {-->
+<!--    color: #555;-->
+<!--  }-->
+
+<!--  .fade-in {-->
+<!--    animation: fadeIn 0.7s ease-in-out;-->
+<!--  }-->
+
+<!--  @keyframes fadeIn {-->
+<!--    from { opacity: 0; transform: translateY(10px); }-->
+<!--    to { opacity: 1; transform: translateY(0); }-->
+<!--  }-->
+<!--</style>-->
+
+<!--<div class="container mt-5 mb-5">-->
+<!--  <div class="card weather-card mx-auto" style="max-width: 550px;">-->
+<!--    <div class="card-header text-center">-->
+<!--      <h4>🌤 Live Weather Update</h4>-->
+<!--    </div>-->
+<!--<form method="POST">-->
+<!--      {% csrf_token %}-->
+<!--      <div class="mb-3" style="max-width: 550px;">-->
+<!--        <label class="form-label">City</label>-->
+<!--        <select name="city" class="form-select" required>-->
+<!--          <option value="">Select City</option>-->
+<!--          <option>Karachi</option>-->
+<!--          <option>Lahore</option>-->
+<!--          <option>Islamabad</option>-->
+<!--          <option>Quetta</option>-->
+<!--          <option>Multan</option>-->
+<!--        </select>-->
+<!--      </div>-->
+
+<!--      <div class="mb-3" >-->
+<!--        <label class="form-label">Year</label>-->
+<!--        <input type="number" name="year" class="form-control" min="2015" max="2030" required>-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label class="form-label">Average Temperature (°C)</label>-->
+<!--        <input type="number" step="0.1" name="avg_temp" class="form-control" required>-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label class="form-label">Rainfall (mm)</label>-->
+<!--        <input type="number" step="0.1" name="rainfall_mm" class="form-control" required>-->
+<!--      </div>-->
+
+<!--      <div class="mb-3">-->
+<!--        <label class="form-label">Humidity (%)</label>-->
+<!--        <input type="number" step="0.1" name="humidity" class="form-control" required>-->
+<!--      </div>-->
+
+<!--      <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Predict</button>-->
+<!--    </form>-->
+
+<!--    {% if result %}-->
+<!--    <div class="alert alert-info mt-4 text-center" style="max-width: 550px;">-->
+<!--      <h5 class="fw-bold mb-1">{{ result }}</h5>-->
+<!--      <p class="mb-0">Confidence: {{ probability }}%</p>-->
+<!--    </div>-->
+<!--    {% endif %}-->
+<!--  </div>-->
+
+
+<!--  </div>-->
+<!--</div>-->
+
+<!--<-->
+<!--{% endblock %}-->
+
+
 {% extends "master.html" %}
 {% block content %}
 <style>
@@ -6,11 +191,21 @@
     font-family: "Poppins", sans-serif;
   }
 
+  .container {
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .weather-card {
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 550px;
+    padding-bottom: 1rem;
   }
 
   .weather-card:hover {
@@ -24,6 +219,7 @@
     border-top-right-radius: 20px !important;
     padding: 20px;
     color: #fff;
+    text-align: center;
   }
 
   .card-header h4 {
@@ -36,11 +232,8 @@
     color: #444;
   }
 
-  /* ✅ Dropdown width slightly smaller and centered */
-  select.form-select {
-    width: 95%;
-    margin: 0 auto;
-    display: block;
+  select.form-select,
+  input.form-control {
     border-radius: 12px;
     border: 1px solid #bbb;
     padding: 12px 15px;
@@ -50,72 +243,35 @@
     font-weight: 500;
   }
 
-  select.form-select:focus {
+  select.form-select:focus,
+  input.form-control:focus {
     box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.3);
     border-color: #6c757d;
-    outline: none;
     background-color: #fff;
+    outline: none;
   }
 
-  .btn-custom {
+  .btn-primary {
     background: linear-gradient(135deg, #6c757d, #495057);
     color: white;
     font-weight: 600;
     border: none;
     border-radius: 10px;
     transition: all 0.3s ease;
+    padding: 10px 0;
   }
 
-  .btn-custom:hover {
+  .btn-primary:hover {
     background: linear-gradient(135deg, #495057, #343a40);
     transform: scale(1.03);
   }
 
-  #weatherResult {
-    margin-top: 25px;
-    text-align: center;
-    font-weight: 600;
-    color: #333;
-  }
-
-  #loading {
-    color: #6c757d;
-    font-weight: 500;
-  }
-
-  .weather-icon {
-    width: 100px;
-    height: 100px;
-    margin: 10px auto;
-    display: none;
-  }
-
-  table {
-    width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
-    background-color: #fafafa;
+  .alert-info {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
     border-radius: 10px;
-    overflow: hidden;
-  }
-
-  th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  th {
-    background-color: #f1f3f5;
+    padding: 1rem;
     color: #333;
-    font-weight: 600;
-  }
-
-  td {
-    color: #555;
-  }
-
-  .fade-in {
     animation: fadeIn 0.7s ease-in-out;
   }
 
@@ -125,14 +281,15 @@
   }
 </style>
 
-<div class="container mt-5 mb-5">
-  <div class="card weather-card mx-auto" style="max-width: 550px;">
-    <div class="card-header text-center">
-      <h4>🌤 Live Weather Update</h4>
+<div class="container">
+  <div class="card weather-card fade-in">
+    <div class="card-header">
+      <h4>🌦 Pakistan Rain Prediction</h4>
     </div>
-<form method="POST">
+
+    <form method="POST" class="p-4">
       {% csrf_token %}
-      <div class="mb-3" style="max-width: 550px;">
+      <div class="mb-3">
         <label class="form-label">City</label>
         <select name="city" class="form-select" required>
           <option value="">Select City</option>
@@ -144,7 +301,7 @@
         </select>
       </div>
 
-      <div class="mb-3" >
+      <div class="mb-3">
         <label class="form-label">Year</label>
         <input type="number" name="year" class="form-control" min="2015" max="2030" required>
       </div>
@@ -159,25 +316,20 @@
         <input type="number" step="0.1" name="rainfall_mm" class="form-control" required>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-4">
         <label class="form-label">Humidity (%)</label>
         <input type="number" step="0.1" name="humidity" class="form-control" required>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Predict</button>
+      <button type="submit" class="btn btn-primary w-100 mt-2">Predict</button>
     </form>
 
     {% if result %}
-    <div class="alert alert-info mt-4 text-center" style="max-width: 550px;">
+    <div class="alert alert-info mt-4 text-center mx-4">
       <h5 class="fw-bold mb-1">{{ result }}</h5>
       <p class="mb-0">Confidence: {{ probability }}%</p>
     </div>
     {% endif %}
   </div>
-
-
-  </div>
 </div>
-
-<
 {% endblock %}
