@@ -1,0 +1,136 @@
+{% extends "master.html" %}
+{% block content %}
+
+<style>
+  /* 🌤 General Layout */
+  body {
+    background-color: #f7f7f7;
+    color: #333;
+  }
+
+  /* 🏞 Page Title Section */
+  .page-title {
+    position: relative;
+    background: url('/static/images/weather-banner.jpg') center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 100px 0;
+  }
+
+  .page-title::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.45); /* slight overlay to make text visible */
+  }
+
+  .page-title .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .page-title h1 {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .page-title p {
+    color: #e0e0e0;
+  }
+
+  /* 🌡️ Weather Cards */
+  .card {
+    background-color: #ffffff !important;
+    color: #333 !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 🌦 Daily Forecast Cards */
+  .forecast-card {
+    background: linear-gradient(145deg, #f0f0f0, #ffffff);
+    border: 1px solid #e5e5e5;
+    color: #333;
+  }
+
+  /* 📰 News Section */
+  .card a {
+    color: #00796b;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .card a:hover {
+    text-decoration: underline;
+  }
+
+  h2 {
+    color: #444;
+    font-weight: 600;
+  }
+
+  hr {
+    border-top: 2px solid #ddd;
+  }
+</style>
+
+<section class="page-title bg-2">
+  <div class="container text-center">
+    <h1>Weather & Climate Updates</h1>
+    <p>Latest forecasts and related news for {{ requested_city }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    {% if forecast %}
+      <div class="card mb-4 p-4 shadow-sm text-center">
+        <h2>Current Weather in {{ forecast.city }}</h2>
+        <p class="fs-5">
+          🌡️ {{ forecast.current.temp }}°C — {{ forecast.current.description|title }} <br>
+          💧 Humidity: {{ forecast.current.humidity }}% &nbsp;&nbsp; 💨 Wind: {{ forecast.current.wind }} km/h
+        </p>
+      </div>
+
+      <div class="row">
+        {% for day in forecast.daily %}
+          <div class="col-md-4 mb-4">
+            <div class="card forecast-card text-center p-3 border-0">
+              <h5 class="fw-bold">{{ day.date }}</h5>
+              <p>{{ day.condition|title }}</p>
+              <p>Min: {{ day.temp_min }}°C | Max: {{ day.temp_max }}°C</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-danger text-center">⚠️ Weather data not available right now.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2 class="mt-5 text-center">📰 Latest Weather News</h2>
+    <div class="row">
+      {% for news in news_items %}
+        <div class="col-md-4 mb-4">
+          <div class="card p-3 shadow-sm h-100">
+            <h5><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></h5>
+            <small class="text-muted">{{ news.published }}</small>
+            <p>{{ news.summary }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

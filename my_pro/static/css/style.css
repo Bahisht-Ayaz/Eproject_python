@@ -885,6 +885,33 @@ ul.dropdown-menu li {
   margin-top: 30px;
 }
 
+.btn-main {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #333;
+  border: 2px solid #6c757d;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.btn-main:hover {
+  background-color: #6c757d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+}
+
+.btn-main:active {
+  transform: scale(0.97);
+}
+
+
 .service {
   text-align: center;
   padding: 90px 0;

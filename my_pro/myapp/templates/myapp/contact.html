@@ -2,90 +2,124 @@
 
 {% block content %}
 <style>
-  /* 🌿 General Page Styling */
+  /* 🌤 Overall Page Styling */
   body {
-    background-color: #f5f5f5; /* soft grey background */
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    font-family: "Poppins", sans-serif;
     color: #333;
   }
 
   section.contact-form {
-    padding: 60px 0;
+    padding: 80px 0;
   }
 
   .contact-form .container {
-    background-color: #ffffff;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
     max-width: 900px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* 🌿 Form Fields */
+  .contact-form .container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  /* 🩶 Heading */
+  h2 {
+    color: #444;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  p.subtitle {
+    color: #777;
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+
+  /* 🩶 Input Fields */
   .form-control {
     width: 100%;
-    padding: 12px 15px;
-    border-radius: 8px;
+    padding: 14px 16px;
+    border-radius: 12px;
     border: 1px solid #ccc;
-    background-color: #fafafa;
+    background-color: #f8f9fa;
     transition: all 0.3s ease;
     font-size: 15px;
   }
 
   .form-control:focus {
-    outline: none;
-    border-color: #888;
+    border-color: #6c757d;
     background-color: #fff;
-    box-shadow: 0 0 4px rgba(150, 150, 150, 0.3);
+    box-shadow: 0 0 8px rgba(108, 117, 125, 0.2);
+    outline: none;
   }
 
-  /* 🌿 Labels & Spacing */
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
-  /* 🌿 Button Styling */
+  textarea.form-control {
+    resize: none;
+  }
+
+  /* 🌫 Button */
   .btn-default {
-    background-color: #666; /* medium grey */
+    background: linear-gradient(135deg, #6c757d, #495057);
     color: #fff;
     border: none;
-    border-radius: 8px;
-    padding: 12px 25px;
+    border-radius: 12px;
+    padding: 12px 28px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     transition: all 0.3s ease;
+    width: 100%;
   }
 
   .btn-default:hover {
-    background-color: #444; /* darker grey */
+    background: linear-gradient(135deg, #495057, #343a40);
     transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(73, 80, 87, 0.3);
   }
 
-  /* 🌿 Success & Error Messages */
+  /* 🌿 Messages */
   .alert {
     margin-top: 20px;
-    padding: 12px 18px;
-    border-radius: 8px;
+    padding: 14px 18px;
+    border-radius: 10px;
     font-weight: 500;
   }
 
   .alert-success {
-    background-color: #e6f7e9;
-    color: #2f7d32;
-    border: 1px solid #b7e0b8;
+    background-color: #eafaf1;
+    color: #287d3c;
+    border: 1px solid #b9e5c2;
   }
 
-  .alert-error,
-  .alert-danger {
+  .alert-danger,
+  .alert-error {
     background-color: #fdeaea;
     color: #a33a3a;
     border: 1px solid #f5bcbc;
   }
 
-  /* 🌿 Responsive Design */
+  /* ✨ Fade Animation */
+  .fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 📱 Responsive */
   @media (max-width: 768px) {
     .contact-form .container {
-      padding: 25px 20px;
+      padding: 30px 20px;
     }
     .btn-default {
       width: 100%;
@@ -93,10 +127,10 @@
   }
 </style>
 
-<section class="contact-form">
+<section class="contact-form fade-in">
   <div class="container">
-    <h2 class="text-center mb-4" style="color:#555; font-weight:600;">Drop Us A Note</h2>
-    <p class="text-center mb-5" style="color:#777;">We’d love to hear from you. Fill out the form below to get in touch.</p>
+    <h2 class="text-center">Contact Us</h2>
+    <p class="text-center subtitle">We’d love to hear from you. Fill out the form below to get in touch.</p>
 
     <form class="row" id="contact-form" method="POST" action="{% url 'contact' %}">
       {% csrf_token %}
@@ -108,7 +142,7 @@
           <input name="user_email" type="email" class="form-control" placeholder="Email Address" required>
         </div>
         <div class="form-group">
-          <input name="user_subject" type="text" class="form-control" placeholder="Subject" required>
+          <input name="user_number" type="number" class="form-control" placeholder="Contact Number" required>
         </div>
       </div>
 

@@ -10,44 +10,50 @@
 <style>
   /* 🌿 General Page Styling */
   body {
-    background-color: #eef2f6;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f1f1f1, #e9ecef);
+    font-family: "Poppins", sans-serif;
     color: #333;
   }
 
-  section.contact-form {
+  section.feedback-section {
     padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .contact-form .container {
-    background-color: #ffffff;
-    padding: 60px 50px;
+  .feedback-container {
+    background: linear-gradient(145deg, #ffffff, #f6f6f6);
     border-radius: 20px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    padding: 60px 50px;
     max-width: 950px;
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
     transition: all 0.4s ease;
   }
 
-  .contact-form .container:hover {
+  .feedback-container:hover {
     transform: translateY(-4px);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   }
 
-  /* 🌿 Heading */
-  .contact-form h2 {
-    color: #2b3d5c;
+  /* 🌿 Title */
+  .feedback-container h2 {
+    text-align: center;
     font-weight: 700;
-    font-size: 34px;
-    margin-bottom: 12px;
+    color: #444;
+    margin-bottom: 10px;
+    font-size: 32px;
   }
 
-  .contact-form p {
-    color: #6b7280;
-    font-size: 16px;
+  .feedback-container p {
+    text-align: center;
+    color: #666;
     margin-bottom: 45px;
+    font-size: 15px;
   }
 
-  /* 🌿 Input Group Styling */
+  /* 🌿 Input Group */
   .input-group {
     position: relative;
     width: 100%;
@@ -58,20 +64,21 @@
     left: 18px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: #888;
     font-size: 17px;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
   }
 
   .input-group input,
   .input-group textarea {
     width: 100%;
     padding: 13px 16px 13px 48px;
-    border-radius: 10px;
-    border: 1px solid #cbd5e1;
-    background-color: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    background: rgba(255, 255, 255, 0.8);
     font-size: 15px;
     transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
   }
 
   .input-group textarea {
@@ -80,42 +87,42 @@
 
   .input-group input:focus,
   .input-group textarea:focus {
+    border-color: #888;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(136, 136, 136, 0.2);
     outline: none;
-    border-color: #3b82f6;
-    background-color: #fff;
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.25);
   }
 
   .input-group input:focus + i,
   .input-group textarea:focus + i {
-    color: #3b82f6;
+    color: #555;
   }
 
-  /* 🌿 Button Styling */
+  /* 🌿 Button */
   .btn-default {
-    background-color: #666; /* medium grey */
+    background: linear-gradient(135deg, #6c757d, #495057);
     color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 13px 25px;
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
     width: 100%;
-    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.25);
   }
 
   .btn-default:hover {
-    background-color: #444; /* darker grey */
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+    background: linear-gradient(135deg, #495057, #343a40);
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(52, 58, 64, 0.35);
   }
 
   .btn-default i {
     margin-right: 8px;
   }
 
-  /* 🌿 Alerts */
+  /* 🌿 Alert Messages */
   .alert {
     margin-top: 25px;
     padding: 12px 18px;
@@ -124,9 +131,9 @@
   }
 
   .alert-success {
-    background-color: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
   }
 
   .alert-error,
@@ -138,12 +145,12 @@
 
   /* 🌿 Responsive Design */
   @media (max-width: 768px) {
-    .contact-form .container {
+    .feedback-container {
       padding: 35px 25px;
     }
 
-    .contact-form h2 {
-      font-size: 28px;
+    .feedback-container h2 {
+      font-size: 26px;
     }
 
     .btn-default {
@@ -152,10 +159,10 @@
   }
 </style>
 
-<section class="contact-form">
-  <div class="container">
-    <h2 class="text-center">FeedBack Form</h2>
-    <p class="text-center">We’d love to hear from you. Fill out the form below to get in touch.</p>
+<section class="feedback-section">
+  <div class="feedback-container">
+    <h2>Share Your Feedback</h2>
+    <p>Your opinion matters to us — help us improve by sharing your thoughts.</p>
 
     <form class="row g-3" id="feedback-form" method="POST" action="{% url 'feedback' %}">
       {% csrf_token %}
@@ -188,10 +195,9 @@
             name="Rate_us"
             type="text"
             class="form-control"
-            placeholder="Rate Us"
+            placeholder="Rate Us (1–5)"
             required
           />
-
           <i class="fa-solid fa-star"></i>
         </div>
       </div>
@@ -208,7 +214,7 @@
           <i class="fa-solid fa-comment-dots"></i>
         </div>
         <button class="btn btn-default" type="submit">
-          <i class="fa-solid fa-paper-plane"></i> Send FeedBack
+          <i class="fa-solid fa-paper-plane"></i> Send Feedback
         </button>
       </div>
     </form>

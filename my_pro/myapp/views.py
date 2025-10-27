@@ -13,8 +13,8 @@ import os
 def index (request):
     return render(request,"myapp/index.html")
 
-def pricing (request):
-    return render(request,"myapp/pricing.html")
+def webscrapping (request):
+    return render(request,"myapp/webscrapping.html")
 
 def faq (request):
     return render(request,"myapp/faq.html")
@@ -23,10 +23,10 @@ def contact(request):
     if request.method == "POST":
         name = request.POST.get("user_name")
         email = request.POST.get("user_email")
-        subject = request.POST.get("user_subject")
+        phone = request.POST.get("user_number")
         message = request.POST.get("user_message")
 
-        if not name or not email or not subject or not message:
+        if not name or not email or not phone or not message:
             messages.error(request, "⚠️ Please fill in all fields.")
             return redirect("contact")
 
@@ -35,7 +35,7 @@ def contact(request):
             db.collection("contactMessages").add({
                 "name": name,
                 "email": email,
-                "subject": subject,
+                "phone_no": phone,
                 "message": message,
                 "timestamp": firestore.SERVER_TIMESTAMP,
             })
