@@ -3,95 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <title>User List - Climate Admin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-    }
-    .container {
-      width: 80%;
-      margin: 30px auto;
-      background-color: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #444;
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-    tr:nth-child(even) {
-      background-color: #fafafa;
-    }
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-    a.back {
-      display: inline-block;
-      margin-bottom: 15px;
-      text-decoration: none;
-      color: white;
-      background-color: #333;
-      padding: 8px 14px;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
-    a.back:hover {
-      background-color: #555;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>🌦 Climate Admin Panel</h1>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans text-gray-800 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 text-white py-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center px-6">
+      <h1 class="text-2xl font-bold tracking-wide">🌦 Climate Admin Panel</h1>
+    </div>
   </header>
 
-  <div class="container">
-    <a href="Admin_dash" class="back">⬅ Back to Dashboard</a>
-    <h2>👥 Registered Users</h2>
+  <!-- Main Content -->
+  <main class="container mx-auto mt-10 px-6">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-700">👥 Registered Users</h2>
 
-    <table>
-      <tr>
-        <th>User ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-      </tr>
-      {% for u in users %}
-      <tr>
-        <td>{{ u.id }}</td>
-        <td>{{ u.name }}</td>
-        <td>{{ u.email }}</td>
-        <td>{{ u.role }}</td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="4">No users found in Firebase.</td></tr>
-      {% endfor %}
-    </table>
-  </div>
+        <!-- Back Button -->
+        <a href="{% url 'Admin_dash' %}"
+           class="bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800 px-5 py-2.5 rounded-xl shadow hover:from-gray-300 hover:to-gray-200 hover:scale-105 transform transition-all duration-300 border border-gray-300">
+          ⬅ Back to Dashboard
+        </a>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-100 text-gray-700 uppercase text-sm tracking-wider">
+              <th class="py-3 px-5">User ID</th>
+              <th class="py-3 px-5">Name</th>
+              <th class="py-3 px-5">Email</th>
+              <th class="py-3 px-5">Role</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% if users %}
+              {% for u in users %}
+              <tr class="hover:bg-gray-50 transition">
+                <td class="py-3 px-5 text-gray-700">{{ u.id }}</td>
+                <td class="py-3 px-5 font-semibold text-gray-800">{{ u.Name }}</td>
+                <td class="py-3 px-5 text-gray-600">{{ u.Email }}</td>
+                <td class="py-3 px-5 text-gray-700 capitalize">{{ u.Role }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="4" class="text-center text-gray-500 py-6 text-lg">
+                  No users found in Firebase 😔
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-12 text-center text-gray-500 py-6 border-t border-gray-200">
+    <p>&copy; {{ year|default:"2025" }} Climate Admin —
+      <span class="text-gray-700 font-semibold">User Management</span>
+    </p>
+  </footer>
+
 </body>
 </html>

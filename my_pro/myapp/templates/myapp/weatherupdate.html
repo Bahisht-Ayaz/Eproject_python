@@ -2,228 +2,83 @@
 {% block content %}
 
 <style>
-  body {
-    background: linear-gradient(135deg, #f1f1f1, #e4e4e4);
-    font-family: "Poppins", sans-serif;
+  body { background-color: #f7f7f7; color: #333; font-family: "Poppins", sans-serif; }
+  .page-title {
+    position: relative; background: url('/static/images/weather-banner.jpg') center/cover no-repeat;
+    color: #fff; text-align: center; padding: 80px 0;
   }
-
-  .weather-card {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-
-  .weather-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  }
-
-  .card-header {
-    background: linear-gradient(135deg, #6c757d, #adb5bd);
-    border-top-left-radius: 20px !important;
-    border-top-right-radius: 20px !important;
-    padding: 20px;
-    color: #fff;
-  }
-
-  .card-header h4 {
-    font-weight: 700;
-    margin: 0;
-  }
-
-  label.form-label {
-    font-weight: 600;
-    color: #444;
-  }
-
-  /* ✅ Dropdown width slightly smaller and centered */
-  select.form-select {
-    width: 95%;
-    margin: 0 auto;
-    display: block;
-    border-radius: 12px;
-    border: 1px solid #bbb;
-    padding: 12px 15px;
-    transition: all 0.3s ease;
-    background-color: #f8f9fa;
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  select.form-select:focus {
-    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.3);
-    border-color: #6c757d;
-    outline: none;
-    background-color: #fff;
-  }
-
-  .btn-custom {
-    background: linear-gradient(135deg, #6c757d, #495057);
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-  }
-
-  .btn-custom:hover {
-    background: linear-gradient(135deg, #495057, #343a40);
-    transform: scale(1.03);
-  }
-
-  #weatherResult {
-    margin-top: 25px;
-    text-align: center;
-    font-weight: 600;
-    color: #333;
-  }
-
-  #loading {
-    color: #6c757d;
-    font-weight: 500;
-  }
-
-  .weather-icon {
-    width: 100px;
-    height: 100px;
-    margin: 10px auto;
-    display: none;
-  }
-
-  table {
-    width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
-    background-color: #fafafa;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  th {
-    background-color: #f1f3f5;
-    color: #333;
-    font-weight: 600;
-  }
-
-  td {
-    color: #555;
-  }
-
-  .fade-in {
-    animation: fadeIn 0.7s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .page-title::after { content: ""; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.45);}
+  .page-title .container { position: relative; z-index: 2; }
+  .page-title h1 { font-weight: 700; letter-spacing: 1px; }
+  .page-title p { color: #e0e0e0; }
+  .card { background-color: #fff; color: #333; border:1px solid #e0e0e0; border-radius:15px; transition: all 0.3s ease-in-out;}
+  .card:hover { transform: translateY(-5px); box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+  .forecast-card { background: linear-gradient(145deg,#f0f0f0,#ffffff); border:1px solid #e5e5e5; color:#333; }
+  h2 { color: #444; font-weight:600; }
+  hr { border-top: 2px solid #ddd; }
+  .card a { color:#00796b; text-decoration:none; font-weight:600; }
+  .card a:hover { text-decoration:underline; }
 </style>
 
-<div class="container mt-5 mb-5">
-  <div class="card weather-card mx-auto" style="max-width: 550px;">
-    <div class="card-header text-center">
-      <h4>🌤 Live Weather Update</h4>
-    </div>
-
-    <div class="card-body p-4">
-      <form id="weatherForm">
-        <div class="mb-3 text-center">
-          <label for="city" class="form-label">Select City</label>
-          <select id="city" class="form-select" required>
-            <option value="">-- Choose City --</option>
-            <option>Karachi</option>
-            <option>Lahore</option>
-            <option>Islamabad</option>
-            <option>Rawalpindi</option>
-            <option>Faisalabad</option>
-            <option>Multan</option>
-            <option>Peshawar</option>
-            <option>Quetta</option>
-            <option>Sialkot</option>
-            <option>Hyderabad</option>
-            <option>Sukkur</option>
-            <option>Gujranwala</option>
-            <option>Bahawalpur</option>
-            <option>Murree</option>
-            <option>Abbottabad</option>
-            <option>Larkana</option>
-            <option>Mirpur</option>
-            <option>Muzaffarabad</option>
-            <option>Gwadar</option>
-            <option>Khuzdar</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-custom w-100 py-2">
-          🔍 Get Weather
-        </button>
-      </form>
-
-      <div id="weatherResult" class="mt-4 fade-in">
-        <img id="weatherIcon" class="weather-icon" src="" alt="Weather Icon" />
-        <p id="loading" style="display:none;">⏳ Fetching weather data...</p>
-        <div id="weatherTableContainer" style="display:none;">
-          <table class="table table-bordered">
-            <tbody>
-              <tr><th>📍 City</th><td id="cityName"></td></tr>
-              <tr><th>🌡️ Temperature</th><td id="temperature"></td></tr>
-              <tr><th>🌦️ Condition</th><td id="description"></td></tr>
-              <tr><th>💨 Wind Speed</th><td id="windSpeed"></td></tr>
-              <tr><th>💧 Humidity</th><td id="humidity"></td></tr>
-              <tr><th>🌅 Local Time</th><td id="localTime"></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+<!-- Page Header -->
+<section class="page-title">
+  <div class="container">
+    <h1>Weather & Climate Updates</h1>
+    <p>Latest forecasts and news for {{ requested_city }}</p>
+    <p style="font-size:0.9rem;">Data source: {{ forecast.source|title }}, Time: {{ now }}</p>
   </div>
-</div>
+</section>
 
-<script>
-  document.getElementById("weatherForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+<section class="section">
+  <div class="container mt-4">
 
-    const city = document.getElementById("city").value.trim();
-    const apiKey = "fd0080121cd249f99e673250252310"; // ✅ Your WeatherAPI key
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city},Pakistan&aqi=no`;
+    <!-- Current Weather -->
+    {% if forecast.current %}
+      <div class="card mb-4 p-4 text-center shadow-sm">
+        <h2>Current Weather in {{ forecast.city|default:"Unknown City" }}</h2>
+        <p class="fs-5">
+          🌡️ {{ forecast.current.temp|default:"N/A" }}°C — {{ forecast.current.description|title|default:"N/A" }} <br>
+          💧 Humidity: {{ forecast.current.humidity|default:"N/A" }}% &nbsp;&nbsp; 💨 Wind: {{ forecast.current.wind|default:"N/A" }} km/h
+        </p>
+      </div>
 
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("weatherTableContainer").style.display = "none";
-    document.getElementById("weatherIcon").style.display = "none";
+      <!-- 5-Day Forecast -->
+      <div class="row">
+        {% for day in forecast.daily|default:[] %}
+          <div class="col-md-4 mb-4">
+            <div class="card forecast-card text-center p-3 border-0">
+              <h5 class="fw-bold">{{ day.date|default:"N/A" }}</h5>
+              <p>{{ day.condition|title|default:"N/A" }}</p>
+              <p>Min: {{ day.temp_min|default:"N/A" }}°C | Max: {{ day.temp_max|default:"N/A" }}°C</p>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-center">No forecast data available.</p>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-danger text-center">⚠️ Weather data not available right now.</p>
+    {% endif %}
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      document.getElementById("loading").style.display = "none";
+    <hr>
 
-      if (data && data.current) {
-        document.getElementById("cityName").textContent = data.location.name;
-        document.getElementById("temperature").textContent = data.current.temp_c + "°C";
-        document.getElementById("description").textContent = data.current.condition.text;
-        document.getElementById("windSpeed").textContent = data.current.wind_kph + " km/h";
-        document.getElementById("humidity").textContent = data.current.humidity + "%";
-        document.getElementById("localTime").textContent = data.location.localtime;
+    <!-- Weather News -->
+    <h2 class="mt-5 text-center">📰 Latest Weather News</h2>
+    <div class="row mt-3">
+      {% for news in news_items|default:[] %}
+        <div class="col-md-4 mb-4">
+          <div class="card p-3 shadow-sm h-100">
+            <h5><a href="{{ news.link }}" target="_blank">{{ news.title|default:"No Title" }}</a></h5>
+            <small class="text-muted">{{ news.published|default:"N/A" }}</small>
+            <p>{{ news.summary|default:"No summary available." }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center">No news items available.</p>
+      {% endfor %}
+    </div>
 
-        const icon = document.getElementById("weatherIcon");
-        icon.src = `https:${data.current.condition.icon}`;
-        icon.style.display = "block";
-
-        document.getElementById("weatherTableContainer").style.display = "block";
-      } else {
-        document.getElementById("cityName").textContent = "⚠️ City not found or API error";
-      }
-    } catch (error) {
-      document.getElementById("loading").style.display = "none";
-      document.getElementById("cityName").textContent = "⚠️ Unable to fetch data";
-    }
-  });
-</script>
+  </div>
+</section>
 
 {% endblock %}

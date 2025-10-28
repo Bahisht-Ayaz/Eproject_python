@@ -126,46 +126,85 @@
 </style>
 
 <div class="container mt-5 mb-5">
-  <div class="card weather-card mx-auto" style="max-width: 550px;">
+  <div class="card weather-card mx-auto" style="max-width: 450px;">
     <div class="card-header text-center">
       <h4>🌤 Live Weather Update</h4>
     </div>
-<form method="POST">
-      {% csrf_token %}
-      <div class="mb-3" style="max-width: 550px;">
-        <label class="form-label">City</label>
-        <select name="city" class="form-select" required>
-          <option value="">Select City</option>
-          <option>Karachi</option>
-          <option>Lahore</option>
-          <option>Islamabad</option>
-          <option>Quetta</option>
-          <option>Multan</option>
-        </select>
-      </div>
+<form method="POST"
+      style="max-width: 320px; margin: 30px auto; background: #f9f9f9;
+             padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  {% csrf_token %}
 
-      <div class="mb-3" >
-        <label class="form-label">Year</label>
-        <input type="number" name="year" class="form-control" min="2015" max="2030" required>
-      </div>
+  <h3 style="text-align: center; margin-bottom: 15px; color: #333; font-size: 19px;">
+    🌦️ Climate Data Prediction
+  </h3>
 
-      <div class="mb-3">
-        <label class="form-label">Average Temperature (°C)</label>
-        <input type="number" step="0.1" name="avg_temp" class="form-control" required>
-      </div>
+  <div class="mb-3">
+    <label class="form-label" style="font-weight: 600; color: #555;">City</label>
+    <select name="city" required
+            style="width: 100%; padding: 7px; border-radius: 8px; border: 1px solid #ccc;
+                   font-size: 14px; background: #fff; transition: all 0.3s;">
+      <option value="">Select City</option>
+      <option>Karachi</option>
+      <option>Lahore</option>
+      <option>Islamabad</option>
+      <option>Quetta</option>
+      <option>Multan</option>
+    </select>
+  </div>
 
-      <div class="mb-3">
-        <label class="form-label">Rainfall (mm)</label>
-        <input type="number" step="0.1" name="rainfall_mm" class="form-control" required>
-      </div>
+  <div class="mb-3">
+    <label class="form-label" style="font-weight: 600; color: #555;">Year</label>
+    <input type="number" name="year" min="2015" max="2030" required
+           style="width: 100%; padding: 7px; border-radius: 8px; border: 1px solid #ccc;
+                  font-size: 14px; background: #fff; transition: all 0.3s;">
+  </div>
 
-      <div class="mb-3">
-        <label class="form-label">Humidity (%)</label>
-        <input type="number" step="0.1" name="humidity" class="form-control" required>
-      </div>
+  <div class="mb-3">
+    <label class="form-label" style="font-weight: 600; color: #555;">Temperature (°C)</label>
+    <input type="number" step="0.1" name="avg_temp" required
+           style="width: 100%; padding: 7px; border-radius: 8px; border: 1px solid #ccc;
+                  font-size: 14px; background: #fff; transition: all 0.3s;">
+  </div>
 
-      <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Predict</button>
-    </form>
+  <div class="mb-3">
+    <label class="form-label" style="font-weight: 600; color: #555;">Rainfall (mm)</label>
+    <input type="number" step="0.1" name="rainfall_mm" required
+           style="width: 100%; padding: 7px; border-radius: 8px; border: 1px solid #ccc;
+                  font-size: 14px; background: #fff; transition: all 0.3s;">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" style="font-weight: 600; color: #555;">Humidity (%)</label>
+    <input type="number" step="0.1" name="humidity" required
+           style="width: 100%; padding: 7px; border-radius: 8px; border: 1px solid #ccc;
+                  font-size: 14px; background: #fff; transition: all 0.3s;">
+  </div>
+
+  <button type="submit"
+          style="background: #6c757d; color: #fff; border: none; width: 100%; padding: 9px;
+                 border-radius: 25px; font-size: 15px; font-weight: 600;
+                 transition: all 0.3s; cursor: pointer;">
+    Predict
+  </button>
+</form>
+
+<style>
+  input:focus, select:focus {
+    border-color: #4cafef;
+    box-shadow: 0 0 4px rgba(76,175,239,0.4);
+    outline: none;
+  }
+
+  button:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+</style>
+
+
+
 
     {% if result %}
     <div class="alert alert-info mt-4 text-center" style="max-width: 550px;">

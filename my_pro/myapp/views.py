@@ -1,8 +1,9 @@
 
 # Create your views here.
+import firebase_admin
 from django.contrib import messages
 from my_pro.firebase_config import db
-from firebase_admin import firestore
+from firebase_admin import firestore, auth
 from django.shortcuts import render, redirect
 from django.conf import settings
 import requests
@@ -114,6 +115,7 @@ def register(req):
                 "Email": e,
                 "Password": p,
                 "Role": "User",
+                "timestmape":firestore.SERVER_TIMESTAMP
             })
             messages.success(req,"User Registered Successfully")
             return redirect("reg")
@@ -171,23 +173,33 @@ def Admin_dash (request):
 
 def user_list(request):
     try:
-        user_ref = db.collection("User").order_by("timestamp", direction=firestore.Query.DESCENDING)
-        user_docs = user_ref.stream()
-        user_list = []
+        # Firestore collection reference (timestamp optional)
+        user_ref = db.collection("User")
 
+        # Agar timestamp field exist nahi karti to ye safe version use karein:
+        try:
+            user_docs = user_ref.order_by("timestmape", direction=firestore.Query.DESCENDING).stream()
+        except Exception:
+            user_docs = user_ref.stream()
+
+        user_list = []
         for doc in user_docs:
             data = doc.to_dict()
             user_list.append({
-                "Name": data.get("Name"),
-                "Email": data.get("Email"),
-                "Role": data.get("Role"),
+                "id": doc.id,  # ✅ User ID include kar diya
+                "Name": data.get("Name", "N/A"),  # ✅ lowercase keys (template ke liye match)
+                "Email": data.get("Email", "N/A"),
+                "Role": data.get("Role", "N/A"),
             })
+
+        print(f"✅ {len(user_list)} users fetched from Firestore")
+
     except Exception as e:
-        print("Error fetching feedbacks:", e)
-        feedback_list = []
+        print("❌ Error fetching users:", e)
+        user_list = []
 
-    return render(request, "myapp/feedback_details.html", {"User": user_list})
-
+    # ✅ Correct context name
+    return render(request, "myapp/user_list.html", {"users": user_list})
 
 def feedback_details(request):
     try:
@@ -258,37 +270,46 @@ def predict_weather(request):
 def webscrapping (request):
     return render(request,"myapp/webscrapping.html")
 
+import requests
+from bs4 import BeautifulSoup
+import feedparser
+from django.shortcuts import render
+from django.utils import timezone
+
+# ---------- Config ----------
 OWM_API_KEY = "30f32fd8eb1ec1c3f7a1efad953498c1"
-DEFAULT_CITY = os.getenv("WEATHER_CITY", "Karachi")  # default city
-# Example RSS feeds for weather news (you can replace with site-specific feeds)
+DEFAULT_CITY = "Karachi"
+
+# Replace these with real RSS feeds if needed
 WEATHER_NEWS_FEEDS = [
-    "https://www.dawn.com/latest-news",            # placeholder - replace with a real feed URL
-    "https://www.weather.gov/rss_page.php?site_name=nws"  # placeholder
+    "https://www.weather.gov/rss_page.php?site_name=nws"
 ]
 
+# ---------- OpenWeatherMap API ----------
 def fetch_forecast_via_api(city=DEFAULT_CITY, api_key=OWM_API_KEY):
-    """Use OpenWeatherMap (Current + 5-day/3-hour forecast) if API key is present."""
     if not api_key:
         return None
     try:
         # Current weather
-        cur_url = "https://api.openweathermap.org/data/2.5/weather"
-        cur_params = {"q": city, "appid": api_key, "units": "metric"}
-        cur_res = requests.get(cur_url, params=cur_params, timeout=8)
-        cur_res.raise_for_status()
-        current = cur_res.json()
+        res = requests.get(
+            "https://api.openweathermap.org/data/2.5/weather",
+            params={"q": city, "appid": OWM_API_KEY, "units": "metric"}
+        )
+        res.raise_for_status()
+        current = res.json()
 
-        # 5-day forecast (3-hourly)
-        f_url = "https://api.openweathermap.org/data/2.5/forecast"
-        f_params = {"q": city, "appid": api_key, "units": "metric"}
-        f_res = requests.get(f_url, params=f_params, timeout=8)
+        # 5-day forecast
+        f_res = requests.get(
+            "https://api.openweathermap.org/data/2.5/forecast",
+            params={"q": city, "appid": api_key, "units": "metric"}, timeout=8
+        )
         f_res.raise_for_status()
         forecast = f_res.json()
 
-        # Simplify forecast to daily summary (basic)
+        # Simplify forecast to daily summary
         daily = {}
         for item in forecast.get("list", []):
-            dt_txt = item.get("dt_txt")  # "2025-10-25 12:00:00"
+            dt_txt = item.get("dt_txt")
             date_key = dt_txt.split(" ")[0]
             temps = daily.setdefault(date_key, {"temps": [], "conditions": []})
             temps["temps"].append(item["main"]["temp"])
@@ -305,7 +326,7 @@ def fetch_forecast_via_api(city=DEFAULT_CITY, api_key=OWM_API_KEY):
 
         return {
             "source": "openweathermap",
-            "city": current.get("name"),
+            "city": current.get("name", city),
             "current": {
                 "temp": current["main"]["temp"],
                 "description": current["weather"][0]["description"],
@@ -314,63 +335,31 @@ def fetch_forecast_via_api(city=DEFAULT_CITY, api_key=OWM_API_KEY):
             },
             "daily": daily_summary[:5]  # first 5 days
         }
+
     except Exception as e:
-        # log exception in real app
+        print("API fetch failed:", e)
         return None
 
 
-def fetch_forecast_via_scrape(city=DEFAULT_CITY):
-    """
-    Scrape weather data from BBC Weather (as a fallback if API fails).
-    """
-    try:
-        city_slug = city.lower().replace(" ", "-")
-        TARGET_URL = f"https://www.bbc.com/weather/{city_slug}"
-
-        res = requests.get(TARGET_URL, timeout=8, headers={"User-Agent": "Mozilla/5.0"})
-        res.raise_for_status()
-        soup = BeautifulSoup(res.text, "html.parser")
-
-        # BBC selectors
-        current_temp = soup.select_one(".wr-value--temperature--c")
-        current_desc = soup.select_one(".wr-day__weather-type-description")
-
-        current = {
-            "temp": current_temp.get_text(strip=True) if current_temp else "N/A",
-            "description": current_desc.get_text(strip=True) if current_desc else "N/A"
-        }
-
-        daily_summary = []
-        days = soup.select(".wr-day")
-        for d in days[:5]:
-            date = d.select_one(".wr-date").get_text(strip=True) if d.select_one(".wr-date") else ""
-            tmax = d.select_one(".wr-day-temperature__high-value").get_text(strip=True) if d.select_one(".wr-day-temperature__high-value") else ""
-            tmin = d.select_one(".wr-day-temperature__low-value").get_text(strip=True) if d.select_one(".wr-day-temperature__low-value") else ""
-            cond = d.select_one(".wr-day__weather-type-description").get_text(strip=True) if d.select_one(".wr-day__weather-type-description") else ""
-            daily_summary.append({
-                "date": date,
-                "temp_min": tmin,
-                "temp_max": tmax,
-                "condition": cond
-            })
-
-        return {
-            "source": "scrape",
-            "city": city,
-            "current": current,
-            "daily": daily_summary
-        }
-    except Exception as e:
-        print("Scraping failed:", e)
-        return None
+# ---------- Dummy fallback (if API fails) ----------
+def fetch_forecast_fallback(city=DEFAULT_CITY):
+    # simple dummy weather data
+    return {
+        "source": "fallback",
+        "city": city,
+        "current": {"temp": 30, "description": "clear sky", "humidity": 50, "wind": 10},
+        "daily": [
+            {"date": "2025-10-28", "temp_min": 25, "temp_max": 32, "condition": "sunny"},
+            {"date": "2025-10-29", "temp_min": 26, "temp_max": 33, "condition": "cloudy"},
+            {"date": "2025-10-30", "temp_min": 24, "temp_max": 31, "condition": "rainy"},
+            {"date": "2025-10-31", "temp_min": 25, "temp_max": 32, "condition": "sunny"},
+            {"date": "2025-11-01", "temp_min": 26, "temp_max": 34, "condition": "cloudy"},
+        ]
+    }
 
 
-
+# ---------- Fetch news from RSS feeds ----------
 def fetch_weather_news(feeds=WEATHER_NEWS_FEEDS, max_items=6):
-    """
-    Fetch news/blog items from a list of RSS feeds using feedparser.
-    Returns list of {title, link, published, summary}
-    """
     items = []
     for feed in feeds:
         try:
@@ -385,32 +374,108 @@ def fetch_weather_news(feeds=WEATHER_NEWS_FEEDS, max_items=6):
                 })
         except Exception:
             continue
-    # sort by published if possible
-    # best-effort: entries may have different formats; keep as-is
     return items[:max_items]
 
 
+# ---------- Main View ----------
 def project_price_with_weather(request):
-    """
-    Main view to render the existing template with weather + news/blogs data injected.
-    """
-    city = request.GET.get("city", DEFAULT_CITY)
+        city = request.GET.get("city", DEFAULT_CITY)
 
-    # 1) Try API first (recommended)
-    forecast = fetch_forecast_via_api(city)
+        # Try API
+        forecast = fetch_forecast_via_api(city)
+        if not forecast:
+            # fallback dummy
+            forecast = fetch_forecast_fallback(city)
 
-    # 2) If API unavailable, fallback to scraping (you must set valid selectors)
-    if not forecast:
-        forecast = fetch_forecast_via_scrape(city)
+        news_items = fetch_weather_news()
 
-    # 3) Fetch news/blogs via RSS feeds
-    news_items = fetch_weather_news()
+        context = {
+            "forecast": forecast,
+            "news_items": news_items,
+            "requested_city": city,
+            "now": timezone.now()
+        }
+        print(context)
+        return render(request, "myapp/webscrapping.html", context)
 
-    # 4) Build context for template
-    context = {
-        "forecast": forecast,
-        "news_items": news_items,
-        "requested_city": city,
-        "now": datetime.utcnow()
-    }
-    return render(request, "project_price_weather.html", context)
+def karachi_live_weather(request):
+    """Fetch Karachi's current temperature and 24-hour forecast"""
+    api_key = "30f32fd8eb1ec1c3f7a1efad953498c1"  # Free OpenWeatherMap key
+    city = "Karachi"
+
+    try:
+        # Current weather
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        current_data = requests.get(url, timeout=10).json()
+        current_temp = current_data["main"]["temp"]
+        description = current_data["weather"][0]["description"].title()
+        humidity = current_data["main"]["humidity"]
+        wind = current_data["wind"]["speed"]
+
+        # 24-hour forecast (OpenWeatherMap gives 3-hour intervals)
+        forecast_url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
+        forecast_data = requests.get(forecast_url, timeout=10).json()
+
+        hourly_labels = []
+        hourly_temps = []
+        for item in forecast_data["list"][:8]:  # 8 intervals = 24 hours
+            timestamp = item["dt"]
+            time_str = time.strftime("%I:%M %p", time.localtime(timestamp))
+            hourly_labels.append(time_str)
+            hourly_temps.append(item["main"]["temp"])
+
+        context = {
+            "city": city,
+            "current_temp": current_temp,
+            "description": description,
+            "humidity": humidity,
+            "wind": wind,
+            "labels": hourly_labels,
+            "temps": hourly_temps,
+        }
+
+    except Exception as e:
+        print("Weather fetch error:", e)
+        context = {
+            "city": city,
+            "error": "Unable to load live weather data at this moment.",
+        }
+
+    return render(request, "index.html", context)
+
+
+def admin_login(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        try:
+            # Authenticate with Firebase using email and password
+            user = auth.get_user_by_email(email)  # Firebase user lookup by email
+        except firebase_admin.auth.UserNotFoundError:
+            messages.error(request, "No such user registered with this email.")
+            return redirect("admin_login")
+
+        try:
+            # If Firebase authentication is successful, check the Admin collection in Firestore
+            admin_ref = db.collection("Admin").document(email)  # Firebase document based on email
+            admin_doc = admin_ref.get()
+
+            if admin_doc.exists:
+                # Verify the password in Firebase (This assumes Firebase is being used for authentication)
+                if user.email == email:
+                    # Log the user in
+                    login(request, user)  # Using Django's session to log in
+                    return redirect("Admin")  # Redirect to your actual admin dashboard URL
+                else:
+                    messages.error(request, "Incorrect password.")
+                    return redirect("admin_login")
+            else:
+                messages.error(request, "You are not authorized to access the admin panel.")
+                return redirect("admin_login")
+
+        except Exception as e:
+            messages.error(request, f"Error: {str(e)}")
+            return redirect("admin_login")
+
+    return render(request, "myapp/admin_login.html")

@@ -1,217 +1,199 @@
-{% extends "master.html"%}
+{% extends "master.html" %}
 {% block content %}
 
-<!-- Page Title -->
-<section class="page-title bg-2">
-  <div class="container">
+<!-- Hero Section -->
+<section class="call-to-action bg-1 section-sm overly"
+         style="position: relative;
+                background-image: url('/static/images/about11.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                color: white;
+                padding: 80px 0;">
+
+  <!-- Very light overlay (almost full brightness) -->
+  <div style="position: absolute;
+              top: 0; left: 0;
+              width: 100%; height: 100%;
+              background: rgba(0, 0, 0, 0.05);
+              z-index: 1;"></div>
+
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 text-center">
         <div class="block">
-          <h1>About Big Data-EarthScape Climate Agency</h1>
-          <p>Empowering the world with advanced climate intelligence through data, science, and innovation.</p>
+          <h2 class="mb-3" style="color:white;">About Us</h2>
+          <p style="color:whitesmoke;">
+            Together, we can make a difference. Learn more about how climate change affects our world and how
+            we can adapt to build a resilient future for generations to come.
+          </p>
+<!--          <a href="feedback"-->
+<!--             style="background: #6c757d;-->
+<!--                    color: #fff;-->
+<!--                    padding: 12px 28px;-->
+<!--                    border-radius: 30px;-->
+<!--                    text-decoration: none;-->
+<!--                    font-weight: 600;-->
+<!--                    transition: all 0.3s ease;-->
+<!--                    display: inline-block;">-->
+<!--            Share Your Climate Story-->
+<!--          </a>-->
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- About Section -->
-<section class="about section">
-	<div class="container">
-		<div class="row align-items-center">
-			<div class="col-lg-6">
-				<div class="about-img">
-					<img class="img-fluid" src="static/images/company/about.jpg" alt="About EarthScape Agency">
-				</div>
-			</div>
-			<div class="col-lg-6 mt-5 mt-lg-0">
-				<div class="pl-0 pl-lg-4">
-					<h2>Harnessing Big Data for a Sustainable Planet</h2>
-					<p>At <strong>Big Data-EarthScape Climate Agency</strong>, we combine environmental science with big data analytics to monitor, predict, and manage climate change impacts. Our mission is to transform raw environmental data into actionable insights that help policymakers, researchers, and industries make smarter, greener decisions.</p>
-					<p>Through satellite imagery, IoT sensors, and AI-driven forecasting, we deliver cutting-edge solutions that address the world’s most pressing climate challenges. From predicting weather anomalies to visualizing global carbon emissions, our systems are built to inform and inspire sustainable progress.</p>
-					<a href="contact" class="btn btn-small">Download Agency Profile</a>
-				</div>
-			</div>
-		</div>
 
-		<!-- Counters -->
-		<div class="row counter-box text-center mt-50">
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-flask-outline"></i>
-					<h4 class="count" data-count="349">0</h4>
-					<span>Research Projects</span>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-flame-outline"></i>
-					<h4 class="count" data-count="35000">0</h4>
-					<span>Data Models Processed</span>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-pint-outline"></i>
-					<h4 class="count" data-count="70">0</h4>
-					<span>Global Collaborations</span>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-wineglass-outline"></i>
-					<h4 class="count" data-count="10">0</h4>
-					<span>International Awards</span>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-chatboxes-outline"></i>
-					<h4 class="count" data-count="30">0</h4>
-					<span>Partner Institutions</span>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-4 col-6 mt-4">
-				<div class="counter-item">
-					<i class="ion-ios-body-outline"></i>
-					<h4 class="count" data-count="15">0</h4>
-					<span>Climate Policy Contributions</span>
-				</div>
-			</div>
-		</div>
-	</div>
+
+
+
+
+<!-- About Overview -->
+<section class="section" style="background-color:#ffffff; padding:90px 0;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <img src="/static/images/about.jpg" alt="About EarthScape Agency"
+             class="img-fluid rounded-3 shadow-lg" style="border:4px solid #f0f0f0;">
+      </div>
+      <div class="col-lg-6">
+        <h2 style="color:#222; font-weight:600;">The Climate Group</h2>
+        <p style="color:#555; line-height:1.7;">
+         To join a climate change team, you can volunteer with environmental organizations, join government or NGO pacts and networks, or create a climate-focused role within your existing workplace. Options range from contributing to large-scale initiatives like the Race to Zero campaign and the European Climate Pact, to joining a specific organization like Earth.Org or the Pakistan Environment Trust, or participating in smaller peer networks.
+        </p>
+        <p style="color:#555; line-height:1.7;">
+         Join the Race to Zero: This campaign encourages cities, regions, and businesses to commit to net-zero emissions and requires members to develop decarbonization pathways and disclose their progress.
+        </p>
+        <a href="{% url 'contact' %}" class="btn btn-dark mt-3 px-4 py-2" style="border-radius:8px;">
+          Contact Our Team
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Service Section -->
-<section class="about-feature bg-dark section dark-service">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="title">
-					<h2>We Deliver Insight, Innovation, and Impact</h2>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="ion-ios-color-filter-outline"></i>
-					<h4>Climate Data Visualization</h4>
-					<p>We transform complex climate datasets into intuitive, interactive dashboards, enabling stakeholders to interpret patterns and make informed decisions.</p>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="ion-ios-unlocked-outline"></i>
-					<h4>Environmental Risk Analytics</h4>
-					<p>Our AI-powered models assess and predict environmental risks such as floods, droughts, and heatwaves, helping governments plan adaptive responses.</p>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="ion-ios-game-controller-b-outline"></i>
-					<h4>Predictive Modeling</h4>
-					<p>By leveraging machine learning, we simulate climate scenarios to forecast temperature shifts, rainfall variability, and CO₂ concentration trends.</p>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="ion-ios-mic-outline"></i>
-					<h4>Geospatial Analysis</h4>
-					<p>Integrating satellite and sensor data, we produce high-resolution climate maps that visualize ecosystem changes across the planet.</p>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="ion-ios-lightbulb-outline"></i>
-					<h4>AI & Machine Learning Solutions</h4>
-					<p>We apply deep learning techniques to identify hidden climate patterns and optimize data-driven policy recommendations.</p>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6">
-				<div class="service-item">
-					<i class="icon ion-coffee"></i>
-					<h4>Sustainability Consulting</h4>
-					<p>Our expert team collaborates with organizations to design and implement sustainable strategies for a resilient future.</p>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- Stats Section -->
+<section class="section" style="background: #f4f4f4; padding: 70px 0;">
+  <div class="container text-center">
+    <div class="row justify-content-center">
+      <div class="col-md-3 col-6 mb-4">
+        <div>
+          <h3 style="font-weight:700; color:#222;">350+</h3>
+          <p style="color:#666;">Research Projects</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div>
+          <h3 style="font-weight:700; color:#222;">70+</h3>
+          <p style="color:#666;">Global Collaborations</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div>
+          <h3 style="font-weight:700; color:#222;">30+</h3>
+          <p style="color:#666;">Partner Institutions</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div>
+          <h3 style="font-weight:700; color:#222;">15+</h3>
+          <p style="color:#666;">Climate Policy Contributions</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Testimonial Section -->
-<section class="testimonial section-sm">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="testimonial-carousel text-center">
-					<div class="testimonial-slider owl-carousel">
-						<div>
-							<i class="ion-quote"></i>
-							<p>"EarthScape’s analytics transformed how we assess climate risks. Their insights have become vital to our environmental policy planning."</p>
-							<div class="user">
-								<img src="static/images/item-img1.jpg" alt="Client">
-								<p><span>Dr. Sarah Noor</span> Director, Global Climate Forum</p>
-							</div>
-						</div>
-						<div>
-							<i class="ion-quote"></i>
-							<p>"The interactive dashboards provided by EarthScape have revolutionized how our agency visualizes and shares environmental data."</p>
-							<div class="user">
-								<img src="static/images/item-img1.jpg" alt="Client">
-								<p><span>Ahmed Raza</span> Head of Data Science, GreenWorld Initiative</p>
-							</div>
-						</div>
-						<div>
-							<i class="ion-quote"></i>
-							<p>"An outstanding partner in climate research — their predictive models helped us anticipate and mitigate agricultural drought losses."</p>
-							<div class="user">
-								<img src="static/images/item-img1.jpg" alt="Client">
-								<p><span>Elena Cruz</span> UN Environment Programme</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<!-- Mission & Vision -->
+<section class="section" style="background: linear-gradient(135deg, #e9ecef, #f8f9fa); padding: 100px 0;">
+  <div class="container text-center">
+    <h2 style="color:#222; font-weight:700; margin-bottom:50px; text-transform:uppercase; letter-spacing:1px;">
+      Our Vision & Mission
+    </h2>
+    <div class="row justify-content-center">
 
-			<div class="col-lg-6 mt-5 mt-lg-0">
-				<div class="tabCommon">
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
-						<li class="nav-item"><a class="nav-link active" id="vision-tab" data-toggle="tab" href="#vision" role="tab">Vision</a></li>
-						<li class="nav-item"><a class="nav-link" id="mission-tab" data-toggle="tab" href="#mission" role="tab">Mission</a></li>
-						<li class="nav-item"><a class="nav-link" id="approch-tab" data-toggle="tab" href="#approch" role="tab">Approach</a></li>
-					</ul>
+      <!-- Vision Card -->
+      <div class="col-lg-5 mb-4">
+        <div style="background:#ffffff; padding:40px; border-radius:25px; box-shadow:0 8px 20px rgba(0,0,0,0.08); transition: all 0.4s ease; border: 1px solid #e0e0e0;"
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.1)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';">
+          <h4 style="color:#007bff; font-weight:600;">🌍 Vision</h4>
+          <p style="color:#555; margin-top:15px; font-size:1.05rem; line-height:1.8;">
+            To create a world where innovation and data empower humanity to restore balance with nature —
+            building a truly sustainable planet for generations to come.
+          </p>
+        </div>
+      </div>
 
-					<div class="tab-content" id="myTabContent">
-						<div class="tab-pane fade show active" id="vision" role="tabpanel">
-							<p>Our vision is a planet where data drives environmental restoration — a connected ecosystem of technology and science that safeguards our Earth for generations to come.</p>
-						</div>
-						<div class="tab-pane fade" id="mission" role="tabpanel">
-							<p>Our mission is to empower global decision-makers with real-time, data-driven climate insights. We bridge the gap between science and action using advanced analytics and transparent reporting tools.</p>
-						</div>
-						<div class="tab-pane fade" id="approch" role="tabpanel">
-							<p>We combine rigorous research, open data, and AI to analyze complex climate systems. Our multidisciplinary approach integrates environmental modeling, visualization, and policy simulation to deliver precise and actionable outcomes.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+      <!-- Mission Card -->
+      <div class="col-lg-5 mb-4">
+        <div style="background:#ffffff; padding:40px; border-radius:25px; box-shadow:0 8px 20px rgba(0,0,0,0.08); transition: all 0.4s ease; border: 1px solid #e0e0e0;"
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 12px 25px rgba(0,0,0,0.1)';"
+             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';">
+          <h4 style="color:#28a745; font-weight:600;">💡 Mission</h4>
+          <p style="color:#555; margin-top:15px; font-size:1.05rem; line-height:1.8;">
+            To provide transparent, real-time, and reliable climate data — empowering institutions and individuals
+            to take meaningful climate action through insight and innovation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </section>
+
 
 <!-- Call to Action -->
-<section class="call-to-action bg-1 section-sm overly">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="block">
-					<h2 class="mb-3">Designing the Future of Climate Intelligence</h2>
-					<p>Join us in creating data-driven environmental solutions. Explore how Big Data-EarthScape Climate Agency is redefining global sustainability through analytics, innovation, and collaboration.</p>
-					<a class="btn btn-main btn-solid-border" href="contact">Collaborate With Us</a>
-				</div>
-			</div>
-		</div>
-	</div>
+<section class="call-to-action bg-1 section-sm overly"
+         style="position: relative;
+                background-image: url('/static/images/about111.jfif');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                color: white;
+                padding: 80px 0;">
+
+  <!-- Very light overlay (almost full brightness) -->
+  <div style="position: absolute;
+              top: 0; left: 0;
+              width: 100%; height: 100%;
+              background: rgba(0, 0, 0, 0.05);
+              z-index: 1;"></div>
+
+  <div class="container" style="position: relative; z-index: 2;">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div class="block">
+          <h2 class="mb-3" style="color:white;">Join the Mission for a Sustainable Planet</h2>
+          <p style="color:whitesmoke;">
+            Together, we can make a difference. Learn more about how climate change affects our world and how
+            we can adapt to build a resilient future for generations to come.
+          </p>
+          <a href="feedback"
+             style="background: #6c757d;
+                    color: #fff;
+                    padding: 12px 28px;
+                    border-radius: 30px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    display: inline-block;">
+            Share Your Climate Story
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
+<!-- Hover effect -->
+<style>
+  a[href="feedback"]:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+</style>
 
 {% endblock %}
