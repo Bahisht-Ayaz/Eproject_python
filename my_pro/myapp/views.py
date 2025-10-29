@@ -1,5 +1,7 @@
 
 # Create your views here.
+import time
+
 import firebase_admin
 from django.contrib import messages
 from my_pro.firebase_config import db
@@ -10,6 +12,8 @@ import requests
 import joblib
 import pandas as pd
 import os
+import json
+from django.http import JsonResponse
 
 def login_required_page(request):
     """Check if user is logged in, else redirect to login with message."""
@@ -21,6 +25,94 @@ def login_required_page(request):
 def index (request):
     return render(request,"myapp/index.html")
 
+
+from django.shortcuts import render
+import requests, time, json
+
+def index(request):
+    api_key = "30f32fd8eb1ec1c3f7a1efad953498c1"
+    city = "Karachi"
+
+    try:
+        # Current weather
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        current_data = requests.get(url, timeout=10).json()
+        current_temp = current_data["main"]["temp"]
+        description = current_data["weather"][0]["description"].title()
+        humidity = current_data["main"]["humidity"]
+        wind = current_data["wind"]["speed"]
+
+        # Forecast for next 24 hours (3-hour intervals)
+        forecast_url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
+        forecast_data = requests.get(forecast_url, timeout=10).json()
+
+        hourly_labels = []
+        hourly_temps = []
+        for item in forecast_data["list"][:8]:
+            timestamp = item["dt"]
+            time_str = time.strftime("%I:%M %p", time.localtime(timestamp))
+            hourly_labels.append(time_str)
+            hourly_temps.append(item["main"]["temp"])
+
+        print("Labels:", hourly_labels)
+        print("Temps:", hourly_temps)
+
+        context = {
+            "city": city,
+            "current_temp": current_temp,
+            "description": description,
+            "humidity": humidity,
+            "wind": wind,
+            "labels": json.dumps(hourly_labels),
+            "temps": json.dumps(hourly_temps),
+        }
+
+    except Exception as e:
+        print("Weather fetch error:", e)
+        context = {"city": city, "error": "Unable to load live weather data."}
+
+    return render(request, "myapp/index.html", context)
+
+def weather_data(request):
+    """Return Karachi weather data as JSON (for live chart updates)"""
+
+
+    api_key = "30f32fd8eb1ec1c3f7a1efad953498c1"
+    city = "Karachi"
+
+    try:
+        # Current weather
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        current_data = requests.get(url, timeout=10).json()
+        current_temp = current_data["main"]["temp"]
+        description = current_data["weather"][0]["description"].title()
+        humidity = current_data["main"]["humidity"]
+        wind = current_data["wind"]["speed"]
+
+        # 24-hour forecast
+        forecast_url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
+        forecast_data = requests.get(forecast_url, timeout=10).json()
+
+        hourly_labels = []
+        hourly_temps = []
+        for item in forecast_data["list"][:8]:
+            timestamp = item["dt"]
+            time_str = time.strftime("%I:%M %p", time.localtime(timestamp))
+            hourly_labels.append(time_str)
+            hourly_temps.append(item["main"]["temp"])
+
+        return JsonResponse({
+            "success": True,
+            "current_temp": current_temp,
+            "description": description,
+            "humidity": humidity,
+            "wind": wind,
+            "labels": hourly_labels,
+            "temps": hourly_temps,
+        })
+    except Exception as e:
+        print("Weather JSON fetch error:", e)
+        return JsonResponse({"success": False})
 
 def faq (request):
     return render(request,"myapp/faq.html")
