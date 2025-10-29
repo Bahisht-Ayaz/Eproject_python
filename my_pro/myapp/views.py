@@ -11,6 +11,13 @@ import joblib
 import pandas as pd
 import os
 
+def login_required_page(request):
+    """Check if user is logged in, else redirect to login with message."""
+    if not request.session.get("email"):
+        messages.warning(request, "⚠️ Please login first to access this page.")
+        return False
+    return True
+
 def index (request):
     return render(request,"myapp/index.html")
 
@@ -18,7 +25,12 @@ def index (request):
 def faq (request):
     return render(request,"myapp/faq.html")
 
+
 def contact(request):
+    # ✅ Restrict access for non-logged users
+    if not login_required_page(request):
+        return redirect("log")
+
     if request.method == "POST":
         name = request.POST.get("user_name")
         email = request.POST.get("user_email")
@@ -30,7 +42,6 @@ def contact(request):
             return redirect("contact")
 
         try:
-            # Send to Firestore
             db.collection("contactMessages").add({
                 "name": name,
                 "email": email,
@@ -47,11 +58,18 @@ def contact(request):
 
     return render(request, "myapp/contact.html")
 
-def weatherupdate (request):
-    return render(request,"myapp/weatherupdate.html")
+def weatherupdate(request):
+    # ✅ Restrict access
+    if not login_required_page(request):
+        return redirect("log")
+    return render(request, "myapp/weatherupdate.html")
 
 
 def feedback(request):
+    # ✅ Restrict access
+    if not login_required_page(request):
+        return redirect("log")
+
     if request.method == "POST":
         name = request.POST.get("user_name")
         email = request.POST.get("user_email")
@@ -63,7 +81,6 @@ def feedback(request):
             return redirect("feedback")
 
         try:
-            # ✅ Save feedback to Firestore
             db.collection("Feedbacks").add({
                 "name": name,
                 "email": email,
@@ -116,7 +133,6 @@ def register(req):
                 "Role": "User",
                 "timestamp": firestore.SERVER_TIMESTAMP
             })
-            # Instead of Django message, send variable to template
             return render(req, "myapp/register.html", {"reg_success": n})
         else:
             error = response.json().get("error", {}).get("message", "Unknown Error")
@@ -137,26 +153,20 @@ def login(req):
             return redirect("log")
 
         url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={settings.FIRE}"
-        payload = {
-            "email": e,
-            "password": p,
-            "returnSecureToken": True
-        }
+        payload = {"email": e, "password": p, "returnSecureToken": True}
         res = requests.post(url, json=payload)
 
         if res.status_code == 200:
             userInfo = res.json()
             req.session["email"] = userInfo.get("email")
-            # Instead of redirecting immediately, pass a flag to show popup
             return render(req, "myapp/login.html", {"login_success": userInfo.get("email")})
         else:
             error = res.json().get("error", {}).get("message", "Message Not Found")
-            print(error)
 
             if error == "INVALID_LOGIN_CREDENTIALS":
                 messages.error(req, "❌ Invalid credentials. Please try again.")
             elif error == "INVALID_PASSWORD":
-                messages.error(req, "🔒 Incorrect password. Please re-enter your password.")
+                messages.error(req, "🔒 Incorrect password.")
             elif error == "EMAIL_NOT_FOUND":
                 messages.error(req, "📧 Email not found. Please register first.")
             else:
@@ -237,7 +247,14 @@ def feedback_details(request):
 model_path = os.path.join(os.path.dirname(__file__), "models", "best_pipeline.joblib")
 model = joblib.load(model_path)
 
+from django.contrib import messages  # make sure this import is at the top
+
 def predict_weather(request):
+    # 🔒 Check if user is logged in (session check)
+    if not request.session.get("email"):
+        messages.warning(request, "⚠️ Please login first to use the weather prediction feature.")
+        return redirect("log")  # "log" → your user login page name
+
     result = None
     probability = None
 
@@ -268,10 +285,11 @@ def predict_weather(request):
 
         probability = round(proba * 100, 2)
 
-    return render(request,"myapp/predict_weather.html", {
+    return render(request, "myapp/predict_weather.html", {
         "result": result,
         "probability": probability
     })
+
 
 
 def webscrapping (request):
