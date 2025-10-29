@@ -92,35 +92,40 @@ def register(req):
         p = req.POST.get("password")
 
         if not n or not e or not p:
-            messages.error(req, "All Fields Are Required")
+            messages.error(req, "⚠️ All fields are required.")
             return redirect("reg")
 
         if len(p) < 8:
-            messages.error(req, "Password Must Be 8 Characters Long")
+            messages.error(req, "🔒 Password must be at least 8 characters long.")
             return redirect("reg")
 
         url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={settings.FIRE}"
         payload = {
-        "email" : e,
-        "password" : p,
-        "requestSecureToken" : True
+            "email": e,
+            "password": p,
+            "returnSecureToken": True
         }
 
-        response = requests.post(url,payload)
+        response = requests.post(url, json=payload)
 
         if response.status_code == 200:
-            errorMsg = response.json()
             db.collection("User").add({
-                "Name" : n,
+                "Name": n,
                 "Email": e,
                 "Password": p,
                 "Role": "User",
-                "timestmape":firestore.SERVER_TIMESTAMP
+                "timestamp": firestore.SERVER_TIMESTAMP
             })
-            messages.success(req,"User Registered Successfully")
+            # Instead of Django message, send variable to template
+            return render(req, "myapp/register.html", {"reg_success": n})
+        else:
+            error = response.json().get("error", {}).get("message", "Unknown Error")
+            messages.error(req, f"❌ {error}")
             return redirect("reg")
 
     return render(req, "myapp/register.html")
+
+# USER LOGIN
 
 def login(req):
     if req.method == "POST":
@@ -128,37 +133,38 @@ def login(req):
         p = req.POST.get("password")
 
         if not e or not p:
-            messages.error(req, "All Fields Are Required")
+            messages.error(req, "⚠️ All fields are required.")
             return redirect("log")
+
         url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={settings.FIRE}"
         payload = {
             "email": e,
             "password": p,
-            "requestSecureToken": True
+            "returnSecureToken": True
         }
-        res = requests.post(url,json=payload)
+        res = requests.post(url, json=payload)
 
         if res.status_code == 200:
             userInfo = res.json()
             req.session["email"] = userInfo.get("email")
-            return redirect("dash")
+            # Instead of redirecting immediately, pass a flag to show popup
+            return render(req, "myapp/login.html", {"login_success": userInfo.get("email")})
         else:
-            error = res.json().get("error", {}).get("message","Message Not Found")
+            error = res.json().get("error", {}).get("message", "Message Not Found")
             print(error)
+
             if error == "INVALID_LOGIN_CREDENTIALS":
-                messages.error(req,"Invalid Credentials Please LogIn again")
+                messages.error(req, "❌ Invalid credentials. Please try again.")
             elif error == "INVALID_PASSWORD":
-                messages.error(req, "Password Is Incorrect")
+                messages.error(req, "🔒 Incorrect password. Please re-enter your password.")
+            elif error == "EMAIL_NOT_FOUND":
+                messages.error(req, "📧 Email not found. Please register first.")
+            else:
+                messages.error(req, f"⚠️ {error}")
+
             return redirect("log")
+
     return render(req, "myapp/login.html")
-
-def dashboard(req):
-    if "email" not in req.session:
-        return redirect('log')  # Agar login nahi to login page pe bhej do
-    uemail = req.session["email"]
-    return render(req, "myapp/index.html", {"e": uemail})
-
-
 def logout(request):
     try:
         del request.session['email']
@@ -166,10 +172,11 @@ def logout(request):
         pass
     return redirect('log')  # Login page pe redirect karein
 
-
-def Admin_dash (request):
-    return render(request,"myapp/Admin.html")
-
+def dashboard(req):
+    if "email" not in req.session:
+        return redirect('log')  # Agar login nahi to login page pe bhej do
+    uemail = req.session["email"]
+    return render(req, "myapp/index.html", {"e": uemail})
 
 def user_list(request):
     try:
@@ -443,39 +450,53 @@ def karachi_live_weather(request):
 
     return render(request, "index.html", context)
 
+# ADMIN WORK
+# --- Admin Dashboard ---
+def admin_dashboard(request):
+    # 🧠 Step 1: Check if admin is logged in
+    if not request.session.get("admin_email"):
+        return redirect("admin_login")  # redirect if no session found
+
+    # 🧠 Step 2: Render dashboard if logged in
+    return render(request, "myapp/Admin.html")
+
+# --- Admin Login ---
 
 def admin_login(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        try:
-            # Authenticate with Firebase using email and password
-            user = auth.get_user_by_email(email)  # Firebase user lookup by email
-        except firebase_admin.auth.UserNotFoundError:
-            messages.error(request, "No such user registered with this email.")
+        if not email or not password:
+            messages.error(request, "Please enter both email and password.")
             return redirect("admin_login")
 
         try:
-            # If Firebase authentication is successful, check the Admin collection in Firestore
-            admin_ref = db.collection("Admin").document(email)  # Firebase document based on email
+            admin_ref = db.collection("Admin").document(email)
             admin_doc = admin_ref.get()
 
             if admin_doc.exists:
-                # Verify the password in Firebase (This assumes Firebase is being used for authentication)
-                if user.email == email:
-                    # Log the user in
-                    login(request, user)  # Using Django's session to log in
-                    return redirect("Admin")  # Redirect to your actual admin dashboard URL
-                else:
-                    messages.error(request, "Incorrect password.")
-                    return redirect("admin_login")
-            else:
-                messages.error(request, "You are not authorized to access the admin panel.")
-                return redirect("admin_login")
+                admin_data = admin_doc.to_dict()
+                stored_password = admin_data.get("password")
 
+                if stored_password == password:
+                    request.session["admin_email"] = email
+                    messages.success(request, "✅ Login successful! Welcome Admin.")
+                    return redirect("Admin")
+                else:
+                    messages.error(request, "❌ Incorrect password.")
+            else:
+                messages.error(request, "❌ Admin account not found.")
         except Exception as e:
-            messages.error(request, f"Error: {str(e)}")
-            return redirect("admin_login")
+            messages.error(request, f"⚠ Error connecting to Firebase: {e}")
 
     return render(request, "myapp/admin_login.html")
+
+# --- Admin Logout ---
+def admin_logout(request):
+    if request.session.get("admin_email"):
+        del request.session["admin_email"]
+        messages.success(request, "You have been logged out successfully.")
+    else:
+        messages.info(request, "You are not logged in.")
+    return redirect("admin_login")

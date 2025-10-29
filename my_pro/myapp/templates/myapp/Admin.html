@@ -4,36 +4,65 @@
   <meta charset="utf-8">
   <title>Climate Admin Panel</title>
   <style>
+    /* ===== Base Styles ===== */
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
+      background-color: #f5f6f8;
       color: #333;
       margin: 0;
       padding: 0;
     }
 
+    /* ===== Header ===== */
     header {
-      background-color: #333;
+      background: linear-gradient(90deg, #2f2f2f, #3c3c3c);
       color: #fff;
-      text-align: center;
-      padding: 20px 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      position: relative;
     }
 
     header h1 {
       margin: 0;
-      font-size: 28px;
-      letter-spacing: 1px;
+      font-size: 24px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
+    /* ===== Logout Button ===== */
+    .logout-btn {
+      background: linear-gradient(135deg, #ff5f6d, #ff4d4d);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+    }
+
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #ff4444, #ff1e1e);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 30, 30, 0.4);
+    }
+
+    /* ===== Main Container ===== */
     .container {
-      width: 80%;
+      width: 85%;
       max-width: 1000px;
-      margin: 40px auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin: 50px auto;
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
       text-align: center;
     }
 
@@ -43,61 +72,61 @@
       font-size: 22px;
     }
 
+    /* ===== Navigation Cards ===== */
     ul {
       list-style: none;
       padding: 0;
       display: flex;
       justify-content: center;
-      gap: 30px;
+      flex-wrap: wrap;
+      gap: 25px;
     }
 
     ul li {
-      background-color: #f0f0f0;
-      border-radius: 10px;
+      background: #f7f7f7;
+      border-radius: 12px;
       transition: 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
     }
 
     ul li:hover {
-      background-color: #ddd;
-      transform: translateY(-3px);
+      background: #ebebeb;
+      transform: translateY(-4px);
     }
 
-    a {
+    ul li a {
       display: block;
-      padding: 15px 25px;
+      padding: 18px 28px;
       color: #333;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 16px;
     }
 
+    /* ===== Footer ===== */
     footer {
       text-align: center;
-      padding: 15px;
+      padding: 18px;
       background-color: #333;
       color: white;
       font-size: 14px;
-      margin-top: 50px;
-    }
-
-    .icon {
-      font-size: 22px;
-      margin-right: 8px;
+      margin-top: 60px;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>🌦 Climate Admin Dashboard</h1>
-  </header>
+ <header>
+  <h1>🌦 Climate Admin Dashboard</h1>
+  <a href="{% url 'admin_logout' %}" class="logout-btn">🚪 Logout</a>
+</header>
 
   <div class="container">
     <h2>Manage Climate Users & Feedback</h2>
     <ul>
-      <li><a href="user_list">👤 View User List</a></li>
-      <li><a href="feedback_details">💬 View Feedback</a></li>
+      <li><a href="{% url 'user_list' %}">👤 View User List</a></li>
+      <li><a href="{% url 'feedback_details' %}">💬 View Feedback</a></li>
     </ul>
   </div>
 

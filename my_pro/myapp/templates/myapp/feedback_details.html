@@ -12,11 +12,6 @@
   <header class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 text-white py-4 shadow-lg">
     <div class="container mx-auto flex justify-between items-center px-6">
       <h1 class="text-2xl font-bold tracking-wide">Admin Dashboard</h1>
-      <nav class="space-x-4 text-sm">
-        <a href="/" class="hover:text-gray-300 transition">Home</a>
-        <a href="/user_list/" class="hover:text-gray-300 transition">Users</a>
-        <a href="/feedback_details/" class="font-semibold text-gray-100 border-b-2 border-gray-300 pb-1">Feedback</a>
-      </nav>
     </div>
   </header>
 
@@ -27,7 +22,7 @@
         <h2 class="text-3xl font-bold text-gray-700">User Feedback Details</h2>
 
         <!-- Back Button (Gray & White Theme) -->
-        <a href="{% url 'Admin_dash' %}"
+        <a href="{% url 'Admin' %}"
            class="bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800 px-5 py-2.5 rounded-xl shadow hover:from-gray-300 hover:to-gray-200 hover:scale-105 transform transition-all duration-300 border border-gray-300">
           ⬅ Back to Dashboard
         </a>

@@ -3,91 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registration Page</title>
+  <title>User Registration</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
+    /* Base reset */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-      background-color: #e5e5e5; /* light grey background */
+      background: linear-gradient(135deg, #f7f7f7, #e5e5e5);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      background-color: #ffffff; /* pure white card */
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      padding: 45px 35px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
       width: 100%;
-      max-width: 400px;
-      border: 1px solid #ddd; /* subtle grey border */
+      max-width: 420px;
+      transition: all 0.3s ease;
+      border: 1px solid #ddd;
+    }
+
+    .container:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 24px;
-      color: #333; /* dark grey text */
+      margin-bottom: 28px;
+      color: #222;
       font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
+      font-size: 24px;
+      letter-spacing: 0.5px;
     }
 
     label {
       display: block;
-      margin-bottom: 6px;
-      color: #555; /* medium grey */
-      font-weight: 500;
+      margin-bottom: 8px;
+      color: #444;
       font-size: 14px;
+      font-weight: 500;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc; /* soft border */
-      border-radius: 8px;
-      background-color: #f9f9f9; /* off-white input background */
-      color: #333;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fafafa;
+      margin-bottom: 20px;
       font-size: 15px;
       transition: all 0.3s ease;
     }
 
     input:focus {
       outline: none;
-      border-color: #888; /* darker grey on focus */
-      background-color: #fff;
-      box-shadow: 0 0 0 3px rgba(160, 160, 160, 0.2);
+      border-color: #888;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(150, 150, 150, 0.2);
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #555; /* grey button */
+      padding: 13px;
+      background: linear-gradient(135deg, #333, #555);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 500;
+      letter-spacing: 0.3px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     button:hover {
-      background-color: #333; /* darker grey hover */
+      background: linear-gradient(135deg, #222, #444);
       transform: scale(1.03);
     }
 
     .footer-text {
-      margin-top: 16px;
       text-align: center;
+      margin-top: 18px;
       font-size: 14px;
       color: #666;
     }
@@ -100,55 +108,64 @@
 
     .footer-text a:hover {
       text-decoration: underline;
+      color: #111;
     }
 
-    .alert {
-      background-color: #ffefef;
-      border: 1px solid #ffcccc;
-      padding: 12px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      color: #a94442;
-      font-size: 14px;
+    /* SweetAlert custom style (optional aesthetic touch) */
+    .swal2-popup {
+      border-radius: 12px !important;
+      font-family: "Segoe UI", sans-serif;
     }
   </style>
 </head>
 <body>
   <div class="container">
-   {% if messages %}
-  <ul>
-    {% for m in messages %}
-    <script>
-      alert("{{ m }}")
-    </script>
-    {% endfor %}
-  </ul>
+    {% if messages %}
+      {% for m in messages %}
+        <script>
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ m }}",
+            confirmButtonColor: '#333'
+          });
+        </script>
+      {% endfor %}
     {% endif %}
 
     <h2>Create Account</h2>
-    <form action="" method="post">
-        {% csrf_token %}
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" />
-      </div>
 
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" />
-      </div>
+    <form method="post">
+      {% csrf_token %}
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" />
-      </div>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required>
 
       <button type="submit">Register</button>
     </form>
 
     <div class="footer-text">
-      Already have an account? <a href="/login">Login here</a>
+      Already have an account? <a href="{% url 'log' %}">Login here</a>
     </div>
   </div>
+
+  {% if reg_success %}
+  <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Registration Successful 🎉',
+      text: 'Welcome, {{ reg_success }}!',
+      showConfirmButton: false,
+      timer: 2000
+    }).then(() => {
+      window.location.href = "{% url 'log' %}";
+    });
+  </script>
+  {% endif %}
 </body>
 </html>
