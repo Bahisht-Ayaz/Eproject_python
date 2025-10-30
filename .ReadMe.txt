@@ -1,0 +1,60 @@
+# 🌍 EarthScape Climate Agency
+
+A full-featured **web project built using Python and Django**, designed to provide an interactive and informative platform about climate and environment.  
+This system includes **user authentication**, **admin controls**, and various smart features powered by popular Python libraries.
+
+---
+
+## 🚀 Overview
+
+**EarthScape Climate Agency** is built using **Python (Django Framework)** to deliver a dynamic and data-driven web application.  
+Users can explore climate-related features, and admins have full control via a secure dashboard.
+
+---
+
+## 🧩 Tech Stack
+
+- **Backend:** Python, Django
+- **Database:** SQLite / Firebase (configurable)
+- **Frontend:** HTML, CSS, JavaScript, Bootstrap
+- **Libraries Used:**
+  - `django`
+  - `pandas`
+  - `joblib`
+  - `scikit-learn`
+  - `firebase-admin`
+  - `requests`
+  - `charts`
+  - (add more if your project uses any extra packages)
+
+---
+
+## ⚙️ Installation Guide
+
+Follow these steps to set up and run the project on your local machine.
+
+step 1:-
+	Install all these libraries or dependencies by using these commands paste on terminal of PyCharm given below.
+
+pip install django
+pip install pandas
+pip install joblib
+pip install scikit-learn
+pip install firebase-admin
+pip install requests
+
+
+step 2:-
+	Now run the server by type this command on terminal given below.
+
+python manage.py runserver
+
+step 3:-
+	For admin: For admin dashboard access: 
+click the button down below on website's footer whose name is For admins only.
+ 
+Now you have to add credentials, on email write "admin123@gmail.com" and on password write the password "admin@123" now you can access the admin dashboard.   
+
+For Users:-
+	Guide for users also:
+users can see or use our best features by login in website by clicking login button or click on some features.
